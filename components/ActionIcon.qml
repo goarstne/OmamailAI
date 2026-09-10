@@ -17,7 +17,7 @@ Item {
 
   property string name: ""
   property color color: Color.foreground
-  // Omamail keeps the envelope in the foreground and gives its M the active
+  // OmamailAI keeps the envelope in the foreground and gives its M the active
   // theme accent. Provider artwork uses ProviderLogo instead of this mark.
   property color markColor: color
   property bool brand: false

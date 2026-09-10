@@ -1,7 +1,7 @@
 import QtQuick
 import QtTest
 import qs.Commons
-import "../.." as Omamail
+import "../.." as OmamailAI
 import "../../account/Accounts.js" as Accounts
 
 Item {
@@ -16,17 +16,17 @@ Item {
     property int opens: 0
     function updateEntryInline(id, entry) {}
     function summon(id, payload) {
-      if (id !== "omamail") throw new Error("Wrong application")
+      if (id !== "omamailai") throw new Error("Wrong application")
       opens++
       app.open(payload)
     }
   }
-  Omamail.Service {
+  OmamailAI.Service {
     id: service
     shell: host
-    manifest: ({ id: "omamail", __sourceDir: "/tmp/omamail-test" })
+    manifest: ({ id: "omamailai", __sourceDir: "/tmp/omamailai-test" })
   }
-  Omamail.App { id: app; service: service }
+  OmamailAI.App { id: app; service: service }
 
   TestCase {
     name: "NotificationOpen"

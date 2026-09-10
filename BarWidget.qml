@@ -11,10 +11,10 @@ import "bar"
 BarWidget {
   id: root
 
-  moduleName: "omamail"
+  moduleName: "omamailai"
 
   readonly property var gmail: bar && bar.shell
-    ? bar.shell.serviceFor("omamail") : null
+    ? bar.shell.serviceFor("omamailai") : null
 
   // `barForeground` belongs to qs.Ui.Panel, not to BarWidget: reading it here
   // yields undefined, and assigning undefined to a colour leaves the icon
@@ -48,16 +48,16 @@ BarWidget {
   function openWindow() {
     close()
     if (!bar || !bar.shell) return
-    if (typeof bar.shell.toggle === "function") bar.shell.toggle("omamail", "{}")
-    else if (typeof bar.shell.summon === "function") bar.shell.summon("omamail", "{}")
+    if (typeof bar.shell.toggle === "function") bar.shell.toggle("omamailai", "{}")
+    else if (typeof bar.shell.summon === "function") bar.shell.summon("omamailai", "{}")
   }
 
   function openMessage(accountId, messageId) {
     close()
     if (!bar || !bar.shell) return
     var payload = JSON.stringify({ accountId: accountId, messageId: messageId })
-    if (typeof bar.shell.summon === "function") bar.shell.summon("omamail", payload)
-    else if (typeof bar.shell.toggle === "function") bar.shell.toggle("omamail", payload)
+    if (typeof bar.shell.summon === "function") bar.shell.summon("omamailai", payload)
+    else if (typeof bar.shell.toggle === "function") bar.shell.toggle("omamailai", payload)
   }
 
   function openEvent(eventData) {
@@ -68,8 +68,8 @@ BarWidget {
       view: "calendar", eventId: String(event.uid || ""),
       eventStart: event.start ? Number(event.start.ms) : 0
     })
-    if (typeof bar.shell.summon === "function") bar.shell.summon("omamail", payload)
-    else if (typeof bar.shell.toggle === "function") bar.shell.toggle("omamail", payload)
+    if (typeof bar.shell.summon === "function") bar.shell.summon("omamailai", payload)
+    else if (typeof bar.shell.toggle === "function") bar.shell.toggle("omamailai", payload)
   }
 
   // Whether this draws anything. The widget itself stays: it is the only thing
@@ -91,7 +91,7 @@ BarWidget {
     visible: root.drawsIcon
     anchors.fill: parent
     bar: root.bar
-    tooltipText: root.gmail ? root.gmail.barTooltip : "Omamail"
+    tooltipText: root.gmail ? root.gmail.barTooltip : "OmamailAI"
 
     // Read from inside `iconComponent`. Both BarIconButton and GmailIcon name
     // their own root object `root`, so nothing inside a Component declared
@@ -127,7 +127,7 @@ BarWidget {
     }
 
     onPressed: function(buttonCode) {
-      // The primary action stays opening Omamail. The preview is an extra view,
+      // The primary action stays opening OmamailAI. The preview is an extra view,
       // so it lives on the secondary button instead of replacing the only way
       // to reach the application window. Middle-click still checks for mail.
       if (buttonCode === Qt.LeftButton) {
@@ -142,7 +142,7 @@ BarWidget {
     }
   }
 
-  // The shell draws this same accent line for its own open popouts. Omamail's
+  // The shell draws this same accent line for its own open popouts. OmamailAI's
   // application window is routed separately, so the widget mirrors that mark
   // at the bar's inner edge instead of inventing a different selected shape.
   Rectangle {

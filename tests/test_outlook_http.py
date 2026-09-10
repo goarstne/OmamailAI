@@ -155,7 +155,7 @@ def main():
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     try:
-        with tempfile.TemporaryDirectory(prefix="omamail-outlook-http-") as directory:
+        with tempfile.TemporaryDirectory(prefix="omamailai-outlook-http-") as directory:
             source = QML.replace("@PROVIDERS@", json.dumps((ROOT / "providers").as_uri()))
             source = source.replace("@MICROSOFT@", json.dumps((ROOT / "providers/MicrosoftOAuth.js").as_uri()))
             source = source.replace("@ENDPOINT@", json.dumps(f"http://127.0.0.1:{server.server_port}"))

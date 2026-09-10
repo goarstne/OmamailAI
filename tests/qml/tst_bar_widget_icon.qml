@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 
 // The bar widget with its icon turned off.
 //
@@ -20,7 +20,7 @@ Item {
     property bool ready: true
     property bool windowOpen: false
     property int unreadTotal: 3
-    property string barTooltip: "Omamail"
+    property string barTooltip: "OmamailAI"
     property var barMessages: []
     property var barEvents: []
 
@@ -58,7 +58,7 @@ Item {
     property color barForeground: Qt.rgba(1, 1, 1, 1)
   }
 
-  Omamail.BarWidget {
+  OmamailAI.BarWidget {
     id: widget
     bar: fakeBar
     settings: ({ refreshIntervalSec: 300, showBarIcon: true })

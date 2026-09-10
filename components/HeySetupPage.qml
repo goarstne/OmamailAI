@@ -6,7 +6,7 @@ import "../providers/Registry.js" as Provider
 // Connecting a HEY mailbox, which is a program and a button.
 //
 // There is no form here at all, and that is the point: HEY publishes no IMAP
-// and no API this plugin could sign in to, so Omamail reads it through `hey`,
+// and no API this plugin could sign in to, so OmamailAI reads it through `hey`,
 // the command line client 37signals ship — and `hey` owns the sign-in, the
 // token and the keyring entry it lives in. Everything this page can do is say
 // whether the program is there, start its browser flow, and be honest about
@@ -43,7 +43,7 @@ Column {
     width: parent.width
     providerId: "hey"
     title: "Add a HEY mailbox"
-    detail: "HEY does not speak IMAP or POP. Omamail reads it through the HEY CLI, the client 37signals publish for exactly this — install it once, then sign in here."
+    detail: "HEY does not speak IMAP or POP. OmamailAI reads it through the HEY CLI, the client 37signals publish for exactly this — install it once, then sign in here."
     textColor: root.textColor
     dimColor: root.dimColor
     panelFontFamily: root.panelFontFamily
@@ -157,7 +157,7 @@ Column {
 
     Text {
       width: parent.width
-      text: "This opens HEY in your browser. The token comes back to the HEY CLI, which keeps it in your keyring and refreshes it — Omamail never holds it and never asks for your HEY password."
+      text: "This opens HEY in your browser. The token comes back to the HEY CLI, which keeps it in your keyring and refreshes it — OmamailAI never holds it and never asks for your HEY password."
       color: root.dimColor
       font.family: root.panelFontFamily
       font.pixelSize: Style.font.caption

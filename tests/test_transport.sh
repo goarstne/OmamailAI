@@ -9,7 +9,7 @@ set -eu
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 script="$root/scripts/mail-transport.sh"
-work=$(mktemp -d "${TMPDIR:-/tmp}/omamail-transport-test.XXXXXX")
+work=$(mktemp -d "${TMPDIR:-/tmp}/omamailai-transport-test.XXXXXX")
 trap 'rm -rf "$work"' EXIT INT TERM HUP
 
 mkdir -p "$work/bin"

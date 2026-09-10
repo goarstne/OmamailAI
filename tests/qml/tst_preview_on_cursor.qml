@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 
 // Showing a message as the cursor reaches it.
 //
@@ -151,7 +151,7 @@ Item {
     signal replySent()
   }
 
-  Omamail.App {
+  OmamailAI.App {
     id: app
     service: mailService
     shell: fakeShell
@@ -164,7 +164,7 @@ Item {
     // The FloatingWindow, found by its title the way the other App tests find
     // it: `children[0]` is not reliably the window.
     function window() {
-      return having(app, function(it) { return it.title === "Omamail" })
+      return having(app, function(it) { return it.title === "OmamailAI" })
     }
 
     // The reader panel, found by the one property only it has. It draws no

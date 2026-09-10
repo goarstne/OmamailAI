@@ -32,7 +32,7 @@ Item {
   readonly property bool showLegend: height > Style.space(300) && width > Style.space(320)
 
   readonly property string versionText: !!service && service.version
-    ? String(service.pluginName || "Omamail") + " " + String(service.version)
+    ? String(service.pluginName || "OmamailAI") + " " + String(service.version)
     : ""
   // The column above is centred, so what is left under it is half the leftover
   // height — and that has to hold the label, its margin, and a gap wide enough

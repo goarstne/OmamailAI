@@ -18,7 +18,7 @@ event=$(decode "$3")
 case "$url" in https://*) ;; *) fail 'calendar-write.sh: CalDAV requires HTTPS' ;; esac
 
 umask 077
-work=$(mktemp -d "${TMPDIR:-/tmp}/omamail-calendar-write.XXXXXX") \
+work=$(mktemp -d "${TMPDIR:-/tmp}/omamailai-calendar-write.XXXXXX") \
   || fail 'calendar-write.sh: no temporary directory'
 trap 'rm -rf "$work"' EXIT INT TERM HUP
 printf '%s' "$event" > "$work/event.ics"

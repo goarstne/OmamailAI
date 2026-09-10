@@ -193,7 +193,7 @@ assert.strictEqual(direction.endEdge("ltr"), "right")
 // The plain reading of an HTML message is not only the sender's words: Html.js
 // writes `[image 1]` where a picture stood, and a remote image is blocked until
 // the reader asks for it — so a newsletter opening with a logo hands this a
-// string starting with a Latin "i" that omamail wrote itself.
+// string starting with a Latin "i" that omamailai wrote itself.
 assert.strictEqual(direction.resolveBody("[image 1]مرحبا بالعالم", "Auto"), "rtl",
   "a marker this client wrote is not the message saying which way it runs")
 assert.strictEqual(direction.resolveBody("[image 1][image 2]مرحبا", "Auto"), "rtl")

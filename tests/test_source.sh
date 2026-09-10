@@ -182,7 +182,7 @@ done
 
 # The same mistake on the body side. The plain reading of an HTML message
 # carries this client's own `[image N]` markers in front of the sender's first
-# word, so `resolve` on it answers about a Latin "i" that omamail wrote.
+# word, so `resolve` on it answers about a Latin "i" that omamailai wrote.
 grep -q 'Direction.resolveBody' components/MessageReader.qml \
   || fail "the reader must look past its own image markers before asking which way a body runs"
 
@@ -198,7 +198,7 @@ fi
 grep -q 'bar ? bar\.barForeground' BarWidget.qml \
   || fail "the bar icon must follow bar.barForeground in transparent mode"
 grep -q 'markColor: root.accent' App.qml \
-  || fail "the Omamail header M must use the active theme accent"
+  || fail "the OmamailAI header M must use the active theme accent"
 grep -q 'markColor: Color.accent' BarWidget.qml \
   || fail "the bar M must use the active theme accent"
 
@@ -264,13 +264,13 @@ if "shell.toggle" not in open_window or open_window.index("shell.toggle") > open
 pressed = widget[widget.index("onPressed: function(buttonCode)"):]
 pressed = pressed[:pressed.index("\n    }")]
 if "buttonCode === Qt.LeftButton" not in pressed or "root.openWindow()" not in pressed:
-    raise SystemExit("test_source.sh: left-clicking the bar icon must open Omamail")
+    raise SystemExit("test_source.sh: left-clicking the bar icon must open OmamailAI")
 PY
 # The shell marks an open bar panel with a short accent line on the bar's inner
-# edge. Omamail's main window is not a bar popout, so its widget draws the same
+# edge. OmamailAI's main window is not a bar popout, so its widget draws the same
 # indicator itself instead of substituting an unrelated grey square.
 grep -q 'id: openIndicator' BarWidget.qml \
-  || fail "the open Omamail window must use the bar's accent-line indicator"
+  || fail "the open OmamailAI window must use the bar's accent-line indicator"
 if grep -q 'id: openFill' BarWidget.qml; then
   fail "the bar icon must not replace the native-style indicator with a selected fill"
 fi
@@ -534,8 +534,8 @@ PY
 grep -q 'CalendarEventDetail {' components/CalendarView.qml \
   || fail "calendar event activation must open the native overview"
 
-if grep -q 'Open Omamail' bar/BarPreview.qml; then
-  fail "the bar preview must not contain a redundant Open Omamail button"
+if grep -q 'Open OmamailAI' bar/BarPreview.qml; then
+  fail "the bar preview must not contain a redundant Open OmamailAI button"
 fi
 grep -q 'messages: host ? host.previewMessages : \[\]' Service.qml \
   || fail "the bar preview must use each account's unread preview feed"
@@ -836,9 +836,9 @@ grep -q 'MAX_SUMMARIES_PER_QUERY' cache/Cache.js \
 
 # New-mail notifications use the application's own mark, not the desktop's
 # generic unread-mail glyph.
-grep -q 'assets/omamail.svg' scripts/notify-mail.py \
-  || fail "new-mail notifications need the Omamail app icon"
-[ -f assets/omamail.svg ] || fail "the notification app icon is missing"
+grep -q 'assets/omamailai.svg' scripts/notify-mail.py \
+  || fail "new-mail notifications need the OmamailAI app icon"
+[ -f assets/omamailai.svg ] || fail "the notification app icon is missing"
 
 # Account actions live on the account's edit page. The switcher only changes
 # accounts and leads to management; the management list only leads to editing.
@@ -1153,7 +1153,7 @@ grep -q 'Mailto.draftFromPayload(payload)' App.qml \
 grep -q 'function beginDraft' components/ComposeView.qml \
   || fail "ComposeView must fill a new draft from a mailto"
 grep -q 'omarchy-shell shell summon' scripts/mailto.sh \
-  || fail "the mailto handler must summon Omamail, not toggle it"
+  || fail "the mailto handler must summon OmamailAI, not toggle it"
 grep -q 'register-mailto.sh' scripts/link-plugin.sh \
   || fail "link-plugin.sh must register the mailto desktop handler"
 grep -q 'registerMailtoHandler' Service.qml \

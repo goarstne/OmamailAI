@@ -162,7 +162,7 @@ else
 fi
 
 umask 077
-work=$(mktemp -d "${TMPDIR:-/tmp}/omamail.XXXXXX") || fail 'mail-transport.sh: no temporary directory'
+work=$(mktemp -d "${TMPDIR:-/tmp}/omamailai.XXXXXX") || fail 'mail-transport.sh: no temporary directory'
 trap 'rm -rf "$work"' EXIT INT TERM HUP
 
 case "$mode" in smtp|smtp-oauth) sending=1 ;; *) sending=0 ;; esac

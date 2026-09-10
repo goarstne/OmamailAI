@@ -75,7 +75,7 @@ cat >"$fixture_dir/expected" <<'EOF'
 
 * @cy made their first contribution in https://example.test/pull/13
 
-**Full Changelog**: https://github.com/huacnlee/omamail/compare/v1.0.0...v1.1.0
+**Full Changelog**: https://github.com/goarstne/OmamailAI/compare/v1.0.0...v1.1.0
 EOF
 
 diff -u "$fixture_dir/expected" "$fixture_dir/actual"

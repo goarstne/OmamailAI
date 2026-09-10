@@ -1,12 +1,12 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 Item {
   width: 500
   height: 200
 
-  Omamail.UndoSendToast {
+  OmamailAI.UndoSendToast {
     id: toast
     anchors.right: parent.right
     anchors.bottom: parent.bottom

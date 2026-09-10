@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 project_dir=$(cd "$(dirname "$0")/.." && pwd)
-work=$(mktemp -d /tmp/omamail-calendar-write-test.XXXXXX)
+work=$(mktemp -d /tmp/omamailai-calendar-write-test.XXXXXX)
 trap 'rm -rf "$work"' EXIT
 mkdir -p "$work/bin"
 cat > "$work/bin/curl" <<'SH'

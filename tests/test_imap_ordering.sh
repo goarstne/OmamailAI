@@ -25,7 +25,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 command -v curl >/dev/null 2>&1 || { echo "test_imap_ordering.sh: no curl, skipped"; exit 0; }
 command -v python3 >/dev/null 2>&1 || { echo "test_imap_ordering.sh: no python3, skipped"; exit 0; }
 
-work=$(mktemp -d "${TMPDIR:-/tmp}/omamail-imap-ordering.XXXXXX")
+work=$(mktemp -d "${TMPDIR:-/tmp}/omamailai-imap-ordering.XXXXXX")
 trap 'rm -rf "$work"; [ -z "${srv_pid:-}" ] || kill "$srv_pid" 2>/dev/null || true' EXIT INT TERM HUP
 
 fail() { printf 'test_imap_ordering.sh: %s\n' "$1" >&2; exit 1; }
@@ -169,12 +169,12 @@ stop_server
 start_server ok
 printf 'imap-id %s %s %s %s %s\n' \
   "$(b64 "imap://127.0.0.1:$port")" "$(b64 "imap://127.0.0.1:$port/INBOX")" \
-  "$(b64 'jane:pw')" "$(b64 'ID ("name" "omamail")')" "$(b64 'UID FETCH 1:* (UID)')" \
+  "$(b64 'jane:pw')" "$(b64 'ID ("name" "omamailai")')" "$(b64 'UID FETCH 1:* (UID)')" \
   | ./scripts/mail-transport.sh > "$work/out" 2>/dev/null || true
 stop_server
 sed -n 2p "$work/out" | base64 -d > "$work/reply" 2>/dev/null || : > "$work/reply"
 [ "$(head -1 "$work/out")" = "0" ] || fail "imap-id should have succeeded, curl exited $(head -1 "$work/out")"
-[ "$(commands)" = 'CAPABILITY|LOGIN|ID ("name" "omamail")|SELECT INBOX|UID FETCH 1:* (UID)|LOGOUT|' ] \
+[ "$(commands)" = 'CAPABILITY|LOGIN|ID ("name" "omamailai")|SELECT INBOX|UID FETCH 1:* (UID)|LOGOUT|' ] \
   || fail "ID must reach the server before SELECT, saw: $(commands)"
 [ "$(fetch_rows)" = "2" ] || fail "imap-id must still deliver its FETCH rows, saw $(fetch_rows)"
 [ "$(grep -c '^[A-Za-z0-9]* LOGIN$' "$work/log")" = "1" ] \
@@ -189,7 +189,7 @@ sed -n 2p "$work/out" | base64 -d > "$work/reply" 2>/dev/null || : > "$work/repl
 start_server ok
 printf 'imap-id %s %s %s %s %s\n' \
   "$(b64 "imap://127.0.0.1:$port")" "$(b64 "imap://127.0.0.1:$port/INBOX")" \
-  "$(b64 'jane:pw')" "$(b64 'ID ("name" "omamail")')" \
+  "$(b64 'jane:pw')" "$(b64 'ID ("name" "omamailai")')" \
   "$(b64 'UID FETCH 101 (UID FLAGS BODY.PEEK[])')" \
   | ./scripts/mail-transport.sh > "$work/out" 2>/dev/null || true
 stop_server
@@ -198,12 +198,12 @@ sed -n 2p "$work/out" | base64 -d > "$work/reply" 2>/dev/null || : > "$work/repl
 grep -q "the body" "$work/reply" \
   || fail "imap-id must deliver a message body, got: $(head -c 200 "$work/reply")"
 case "$(commands)" in
-  *'ID ("name" "omamail")|SELECT INBOX|UID FETCH 101'*) ;;
+  *'ID ("name" "omamailai")|SELECT INBOX|UID FETCH 101'*) ;;
   *) fail "the body fetch must still run behind ID and SELECT, saw: $(commands)" ;;
 esac
 
 # Fact 1: why the ID cannot simply be the first command of an ordinary request.
-code=$(transport ok "/INBOX" 'ID ("name" "omamail")' 'UID FETCH 1:* (UID)')
+code=$(transport ok "/INBOX" 'ID ("name" "omamailai")' 'UID FETCH 1:* (UID)')
 [ "$code" = "0" ] || fail "a pathed URL should have succeeded, curl exited $code"
 case "$(commands)" in
   *'SELECT INBOX|ID '*) ;;
@@ -212,13 +212,13 @@ esac
 
 # Fact 2: and why dropping the path instead is not the answer — the order comes
 # out right and the FETCH rows never reach the caller.
-code=$(transport ok "" 'ID ("name" "omamail")' 'SELECT "INBOX"' 'UID FETCH 1:* (UID)')
+code=$(transport ok "" 'ID ("name" "omamailai")' 'SELECT "INBOX"' 'UID FETCH 1:* (UID)')
 [ "$code" = "0" ] || fail "a pathless URL should have succeeded, curl exited $code"
 [ "$(fetch_rows)" = "0" ] \
   || fail "a pathless URL now delivers FETCH rows; imap-id may be simplifiable"
 
 # Fact 3: and why ID is gated on the capability rather than sent to everyone.
-code=$(transport bad "" 'ID ("name" "omamail")' 'SELECT "INBOX"' 'UID FETCH 1:* (UID)')
+code=$(transport bad "" 'ID ("name" "omamailai")' 'SELECT "INBOX"' 'UID FETCH 1:* (UID)')
 [ "$code" = "0" ] && fail "a server that refuses ID must not be reported as success"
 case "$(commands)" in
   *'UID FETCH'*) fail "--fail-early must stop the run at the BAD, saw: $(commands)" ;;

@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 // An attachment row has two verbs now, and they must not be one.
 //
@@ -11,7 +11,7 @@ Item {
   width: 500
   height: 80
 
-  Omamail.AttachmentRow {
+  OmamailAI.AttachmentRow {
     id: row
     width: parent.width
     attachment: ({ filename: "statement.pdf", mimeType: "application/pdf",

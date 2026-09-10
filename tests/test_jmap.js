@@ -850,10 +850,10 @@ const listEmail = {
   from: [{ name: "Eve Lund", email: "eve@example.net" }],
   to: [{ name: null, email: "ada@example.org" }],
   cc: null,
-  subject: "[omamail-test] Unread",
+  subject: "[omamailai-test] Unread",
   preview: "This one is unread.\n",
   hasAttachment: false,
-  messageId: ["unread@omamail-test.invalid"],
+  messageId: ["unread@omamailai-test.invalid"],
   inReplyTo: null,
   references: null,
   "header:List-Unsubscribe": null,
@@ -875,9 +875,9 @@ deepEqual(row.payload.parts, [])
 deepEqual(row.payload.headers, [
   { name: "From", value: '"Eve Lund" <eve@example.net>' },
   { name: "To", value: "ada@example.org" },
-  { name: "Subject", value: "[omamail-test] Unread" },
+  { name: "Subject", value: "[omamailai-test] Unread" },
   { name: "Date", value: "Mon, 24 Aug 2026 09:00:00 +0000" },
-  { name: "Message-ID", value: "<unread@omamail-test.invalid>" }
+  { name: "Message-ID", value: "<unread@omamailai-test.invalid>" }
 ])
 
 // The snippet is escaped because `Mail.decodeSnippet` unescapes Gmail's, so a
@@ -903,7 +903,7 @@ deepEqual(jmap.toMessage({
 // A row is what the panel reads through, so it is checked through the panel's
 // own reader rather than field by field here.
 const summary = message.summarize(row, new Date(Date.parse("2026-08-24T10:00:00Z")))
-assert.strictEqual(summary.subject, "[omamail-test] Unread")
+assert.strictEqual(summary.subject, "[omamailai-test] Unread")
 assert.strictEqual(summary.from.email, "eve@example.net")
 assert.strictEqual(summary.from.name, "Eve Lund")
 assert.strictEqual(summary.unread, true)
@@ -957,16 +957,16 @@ const plainEmail = {
   receivedAt: "2026-08-20T09:00:00Z",
   from: [{ name: "Ari Novak", email: "ari@example.com" }],
   to: [{ name: null, email: "ada@example.org" }],
-  subject: "[omamail-test] Plain text",
+  subject: "[omamailai-test] Plain text",
   preview: "A plain-text message, nothing more.\n",
-  messageId: ["plain@omamail-test.invalid"],
+  messageId: ["plain@omamailai-test.invalid"],
   "header:Date": " Thu, 20 Aug 2026 09:00:00 +0000",
   headers: [
     { name: "From", value: " Ari Novak <ari@example.com>" },
     { name: "To", value: " ada@example.org" },
-    { name: "Subject", value: " [omamail-test] Plain text" },
+    { name: "Subject", value: " [omamailai-test] Plain text" },
     { name: "Date", value: " Thu, 20 Aug 2026 09:00:00 +0000" },
-    { name: "Message-ID", value: " <plain@omamail-test.invalid>" },
+    { name: "Message-ID", value: " <plain@omamailai-test.invalid>" },
     { name: "Reply-To", value: " Ari Novak <replies@example.com>" },
     { name: "Content-Type", value: " text/plain; charset=utf-8" }
   ],
@@ -1003,9 +1003,9 @@ assert.strictEqual(message.extractBody(plainRead.payload).source, "plain")
 deepEqual(plainRead.payload.headers, [
   { name: "From", value: '"Ari Novak" <ari@example.com>' },
   { name: "To", value: "ada@example.org" },
-  { name: "Subject", value: "[omamail-test] Plain text" },
+  { name: "Subject", value: "[omamailai-test] Plain text" },
   { name: "Date", value: "Thu, 20 Aug 2026 09:00:00 +0000" },
-  { name: "Message-ID", value: "<plain@omamail-test.invalid>" },
+  { name: "Message-ID", value: "<plain@omamailai-test.invalid>" },
   { name: "Reply-To", value: "Ari Novak <replies@example.com>" },
   { name: "Content-Type", value: "text/plain; charset=utf-8" }
 ])
@@ -1040,10 +1040,10 @@ const htmlEmail = {
   receivedAt: "2026-08-21T10:00:00Z",
   from: [{ name: "Dana Ridley", email: "dana@example.net" }],
   to: [{ name: null, email: "ada@example.org" }],
-  subject: "[omamail-test] HTML with inline image and attachment",
+  subject: "[omamailai-test] HTML with inline image and attachment",
   preview: "Hello from HTML. Here is the logo:\nNotes are attached.\n",
   hasAttachment: true,
-  messageId: ["html@omamail-test.invalid"],
+  messageId: ["html@omamailai-test.invalid"],
   "header:Date": " Fri, 21 Aug 2026 10:00:00 +0000",
   headers: [
     { name: "From", value: " Dana Ridley <dana@example.net>" },
@@ -1068,11 +1068,11 @@ const htmlEmail = {
           {
             partId: "3", blobId: "copng", size: 70, name: "logo.png",
             type: "image/png", charset: null, disposition: "inline",
-            cid: "logo@omamail-test",
+            cid: "logo@omamailai-test",
             headers: [
               { name: "Content-Type", value: ' image/png; name="logo.png"' },
               { name: "Content-Transfer-Encoding", value: " base64" },
-              { name: "Content-ID", value: " <logo@omamail-test>" },
+              { name: "Content-ID", value: " <logo@omamailai-test>" },
               { name: "Content-Disposition", value: ' inline; filename="logo.png"' }
             ]
           }
@@ -1094,7 +1094,7 @@ const htmlEmail = {
     "2": {
       isEncodingProblem: false, isTruncated: false,
       value: '<html><body><p>Hello from <b>HTML</b>. Here is the logo:</p>'
-        + '<img src="cid:logo@omamail-test" alt="logo"><p>Notes are attached.</p></body></html>'
+        + '<img src="cid:logo@omamailai-test" alt="logo"><p>Notes are attached.</p></body></html>'
     }
   }
 }
@@ -1117,7 +1117,7 @@ assert.strictEqual(htmlPart.filename, "")
 assert.strictEqual(htmlPart.body.attachmentId, undefined)
 assert.strictEqual(message.decodeBase64Url(htmlPart.body.data),
   htmlEmail.bodyValues["2"].value)
-assert.strictEqual(htmlPart.body.size, 144)
+assert.strictEqual(htmlPart.body.size, Buffer.byteLength(htmlEmail.bodyValues["2"].value, "utf8"))
 
 // The inline image: no data, its blob as the attachment id, and both halves of
 // the `cid:` link kept — the field and the header — so a JMAP message behaves
@@ -1126,14 +1126,14 @@ const png = related.parts[1]
 assert.strictEqual(png.partId, "3")
 assert.strictEqual(png.mimeType, "image/png")
 assert.strictEqual(png.filename, "logo.png")
-assert.strictEqual(png.cid, "logo@omamail-test")
+assert.strictEqual(png.cid, "logo@omamailai-test")
 assert.strictEqual(png.body.attachmentId, "copng")
 assert.strictEqual(png.body.size, 70)
 assert.strictEqual(png.body.data, undefined)
 deepEqual(png.headers, [
   { name: "Content-Type", value: 'image/png; name="logo.png"' },
   { name: "Content-Transfer-Encoding", value: "base64" },
-  { name: "Content-ID", value: "<logo@omamail-test>" },
+  { name: "Content-ID", value: "<logo@omamailai-test>" },
   { name: "Content-Disposition", value: 'inline; filename="logo.png"' }
 ], "part header values are trimmed of the space the server writes after the colon")
 
@@ -1980,7 +1980,7 @@ const outgoing = [
   "From: \"Test Account\" <ada@example.org>",
   "To: a@b.example,",
   "\tc@d.example",
-  "Subject: [omamail-test] hello",
+  "Subject: [omamailai-test] hello",
   "MIME-Version: 1.0",
   "",
   "From: this line is the body and is not a header"
@@ -1997,7 +1997,7 @@ assert.strictEqual(jmap.messageHeader(outgoing, ""), "")
 assert.strictEqual(jmap.messageHeader("", "From"), "")
 assert.strictEqual(jmap.messageHeader(null, "From"), "")
 // The header block ends at the blank line, so an attachment cannot forge one.
-assert.strictEqual(jmap.messageHeader(outgoing, "Subject"), "[omamail-test] hello")
+assert.strictEqual(jmap.messageHeader(outgoing, "Subject"), "[omamailai-test] hello")
 assert.strictEqual(
   jmap.messageHeader("Subject: only headers\r\n", "Subject"), "only headers",
   "a message that never reached its blank line still has the headers it has")

@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 import "../../account/Unified.js" as Unified
 
 Item {
@@ -19,10 +19,10 @@ Item {
     }
   }
 
-  Omamail.Service {
+  OmamailAI.Service {
     id: mailService
     shell: shellStore
-    manifest: ({ id: "omamail", __sourceDir: "/tmp/omamail-test" })
+    manifest: ({ id: "omamailai", __sourceDir: "/tmp/omamailai-test" })
   }
 
   TestCase {
@@ -52,7 +52,7 @@ Item {
       mailService.applySettings({})
       mailService.setShowBarIcon(false)
       compare(mailService.showBarIcon, false)
-      compare(shellStore.updatedId, "omamail")
+      compare(shellStore.updatedId, "omamailai")
       verify(shellStore.updatedEntry !== null)
       compare(shellStore.updatedEntry.showBarIcon, false)
     }
@@ -63,7 +63,7 @@ Item {
 
       mailService.setUnifiedCalendarView(true)
       compare(mailService.unifiedCalendarView, true)
-      compare(shellStore.updatedId, "omamail")
+      compare(shellStore.updatedId, "omamailai")
       verify(shellStore.updatedEntry !== null)
       compare(shellStore.updatedEntry.unifiedCalendarView, true)
     }
@@ -74,7 +74,7 @@ Item {
 
       mailService.setUnifiedMailboxes(true)
       compare(mailService.unifiedMailboxes, true)
-      compare(shellStore.updatedId, "omamail")
+      compare(shellStore.updatedId, "omamailai")
       verify(shellStore.updatedEntry !== null)
       compare(shellStore.updatedEntry.unifiedMailboxes, true)
     }

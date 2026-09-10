@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "omamail",
-  "name": "Omamail AI",
+  "id": "omamailai",
+  "name": "OmamailAI",
   "version": "0.8.2",
   "author": "huacnlee",
   "license": "MIT",
-  "homepage": "https://github.com/goarstne/omamail",
+  "homepage": "https://github.com/goarstne/OmamailAI",
   "description": "Email client for Omarchy: read, triage, and reply to Gmail, HEY and any JMAP or IMAP mailbox in a native window. Fastmail, iCloud, Outlook, Zoho, Proton Bridge, or your own server — several accounts at once, each with its own inbox and unread count. Keyboard-first, three columns when there is room and one when there is not, and it follows your theme. Meeting invitations are drawn as meetings you can answer, newsletters unsubscribe in one click, and remote images stay blocked until you ask.",
   "kinds": [
     "service",
@@ -19,7 +19,7 @@
     "panel": "App.qml"
   },
   "barWidget": {
-    "displayName": "Omamail",
+    "displayName": "OmamailAI",
     "description": "Unread mail count in the bar; the inbox itself opens as its own window. Works with Gmail, HEY and any JMAP or IMAP mail server.",
     "category": "Communication",
     "aliases": [
@@ -43,7 +43,7 @@
       "contentDirection": "Auto",
       "defaultQuery": "in:inbox",
       "notifyNewMail": "On",
-      "oauthPort": 9481,
+      "oauthPort": 9482,
       "undoSendSeconds": 10,
       "unifiedCalendarView": false,
       "openOnClick": "Window",
@@ -57,7 +57,7 @@
         "type": "boolean",
         "label": "Show the icon in the bar",
         "defaultValue": true,
-        "description": "Turn this off to run Omamail with no envelope in the bar. Mail is still checked and still notifies; only the icon goes. With it off the window opens from a keybinding or a terminal and nowhere else, so bind a key first: o.bind(\"SUPER + SHIFT + G\", \"Omamail\", \"omarchy shell shell toggle omamail '{}'\")"
+        "description": "Turn this off to run OmamailAI with no envelope in the bar. Mail is still checked and still notifies; only the icon goes. Open OmamailAI from the app menu, a terminal or an optional keybinding: o.bind(\"SUPER + SHIFT + G\", \"OmamailAI\", \"omarchy shell shell toggle omamailai '{}'\")"
       },
       {
         "key": "refreshIntervalSec",
@@ -143,7 +143,7 @@
         "min": 1024,
         "max": 65535,
         "step": 1,
-        "defaultValue": 9481,
+        "defaultValue": 9482,
         "description": "Loopback port used once during Google sign-in. HEY and IMAP accounts never use it. Change it only if something else already listens there."
       },
       {

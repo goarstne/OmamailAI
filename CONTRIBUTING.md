@@ -1,4 +1,4 @@
-# Contributing to Omamail
+# Contributing to OmamailAI
 
 There is no issue tracker here. Issues are turned off on purpose: a bug report
 asks somebody else to reproduce a problem, decide what it means, and find the
@@ -41,7 +41,7 @@ it, described in terms of what it protects rather than what it opens.
 
 ## Project boundary
 
-Omamail is a [Quickshell plugin hosted by `omarchy-shell`][omarchy-shell]. Changes should extend that plugin's service or interface, not turn this repository into a second application.
+OmamailAI is a [Quickshell plugin hosted by `omarchy-shell`][omarchy-shell]. Changes should extend that plugin's service or interface, not turn this repository into a second application.
 
 Helper scripts that let the plugin perform its own work belong here. A standalone CLI, agent skill, daemon, SDK, or other independently consumed interface does not. The plugin must not install commands or integrations into global user paths when it loads. Omarchy's plugin installer deliberately [clones and validates plugins, and can enable them, without running installation hooks][plugin-installation].
 
@@ -98,7 +98,7 @@ code once and watch it fail, and say so in the pull request.
 
 ## If you touched the interface
 
-- Follow the **omarchy-style** skill's guidance — Omamail is an Omarchy
+- Follow the **omarchy-style** skill's guidance — OmamailAI is an Omarchy
   application before it is a mail client, and its look is not a matter of taste
   per pull request. If your agent does not carry that skill, take the existing
   components as the specification and change nothing about the visual language

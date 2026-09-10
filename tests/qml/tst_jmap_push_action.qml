@@ -29,7 +29,7 @@ Item {
   Account.MailAccount {
     id: account
 
-    pluginDir: "/tmp/omamail-test"
+    pluginDir: "/tmp/omamailai-test"
     accountId: "jmap:ada@example.org"
     configuredEmail: "ada@example.org"
     providerId: "jmap"

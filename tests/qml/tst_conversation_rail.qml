@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 
 // `n` and `p` walk the conversation rail; `j` and `k` go on walking the list.
 //
@@ -197,7 +197,7 @@ Item {
     function note(text) { actionStatus = String(text || "") }
   }
 
-  Omamail.App {
+  OmamailAI.App {
     id: app
     service: mailService
     shell: fakeShell

@@ -1731,7 +1731,7 @@ function documentFor(bodyHtml, colors) {
 // security argument for reading mode: structural, with a narrow numeric
 // exception rather than a list of removals.
 //
-// The type, the spacing, the measure and the colours are then Omamail's, and
+// The type, the spacing, the measure and the colours are then OmamailAI's, and
 // are applied by `readerDocumentFor` from the theme.
 
 // Elements whose subtree holds nothing a reader wants. <style> and <script>

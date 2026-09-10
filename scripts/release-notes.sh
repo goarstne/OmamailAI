@@ -9,7 +9,7 @@ current_tag="${2-}"
 [ -n "$previous_tag" ] && [ -n "$current_tag" ] \
   || fail "usage: scripts/release-notes.sh <previous-tag> <current-tag>"
 
-repository="${GH_REPOSITORY:-huacnlee/omamail}"
+repository="${GH_REPOSITORY:-goarstne/OmamailAI}"
 notes_dir="$(mktemp -d)"
 trap 'rm -rf "$notes_dir"' EXIT
 

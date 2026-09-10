@@ -40,7 +40,7 @@ class Bridge(unittest.TestCase):
         self.bin = self.root / 'bin'
         self.bin.mkdir()
         self.env = dict(os.environ, XDG_STATE_HOME=str(self.root/'state'), PATH=str(self.bin)+':'+os.environ['PATH'])
-        self.store = self.root/'state/omamail/assistant'
+        self.store = self.root/'state/omamailai/assistant'
         self.tool('omarchy-default-agent','print("claude")')
         for name in ('omarchy-launch-tui','omarchy-agent','xdg-terminal-exec'):
             self.tool(name,f"from pathlib import Path\nPath({str(self.root/'TERMINAL')!r}).touch()\nraise SystemExit(9)")

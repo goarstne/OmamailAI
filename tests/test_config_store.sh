@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 project_dir=$(cd "$(dirname "$0")/.." && pwd)
-work=$(mktemp -d /tmp/omamail-config-store-test.XXXXXX)
+work=$(mktemp -d /tmp/omamailai-config-store-test.XXXXXX)
 trap 'rm -rf "$work"' EXIT
 export XDG_CONFIG_HOME="$work/config"
 store="$project_dir/scripts/config-store.sh"
-target="$XDG_CONFIG_HOME/omamail/accounts.json"
+target="$XDG_CONFIG_HOME/omamailai/accounts.json"
 
 saved='{"version":1,"accounts":[{"id":"ada@example.com","email":"ada@example.com"}],"activeId":"ada@example.com"}'
 write() { printf '%s\n' "$1" | "$store" accounts.json >/dev/null; }
@@ -54,7 +54,7 @@ done
 # The guard is for the account list alone; the other files it writes are
 # unconditional.
 printf '%s\n' '{"zoom":1}' | "$store" window.json >/dev/null
-grep -q '"zoom":1' "$XDG_CONFIG_HOME/omamail/window.json"
+grep -q '"zoom":1' "$XDG_CONFIG_HOME/omamailai/window.json"
 
 # An unknown name, an empty payload, and the permissions the files are kept at.
 if printf '%s\n' 'x' | "$store" secrets.json >/dev/null 2>&1; then

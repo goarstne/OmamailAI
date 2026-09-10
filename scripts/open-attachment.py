@@ -34,7 +34,7 @@ def main() -> int:
         print("The attachment data is not valid base64", file=sys.stderr)
         return 2
 
-    directory = tempfile.mkdtemp(prefix="omamail-attachment-", dir=runtime_directory())
+    directory = tempfile.mkdtemp(prefix="omamailai-attachment-", dir=runtime_directory())
     os.chmod(directory, 0o700)
     target = Path(directory, filename)
     descriptor = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)

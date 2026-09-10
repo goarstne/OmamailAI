@@ -259,8 +259,8 @@ Column {
       Text {
         width: parent.width
         text: "Mail is still checked and still notifies; only the envelope goes. "
-          + "With it off the window opens from a keybinding or a terminal and "
-          + "nowhere else, so bind a key before turning this off:"
+          + "Open OmamailAI from the app menu, a terminal or an optional "
+          + "keybinding:"
         color: root.dimColor
         font.family: root.panelFontFamily
         font.pixelSize: Style.font.caption
@@ -270,8 +270,8 @@ Column {
 
       Text {
         width: parent.width
-        text: "o.bind(\"SUPER + SHIFT + G\", \"Omamail\", "
-          + "\"omarchy shell shell toggle omamail '\{}'\")"
+        text: "o.bind(\"SUPER + SHIFT + G\", \"OmamailAI\", "
+          + "\"omarchy shell shell toggle omamailai '\{}'\")"
         color: root.dimColor
         font.family: root.panelFontFamily
         font.pixelSize: Style.font.caption
@@ -677,7 +677,7 @@ Column {
 
       Text {
         width: parent.width
-        text: "Omamail waits before delivery. Press Alt+Z or select Undo to cancel. Set 0 to send now."
+        text: "OmamailAI waits before delivery. Press Alt+Z or select Undo to cancel. Set 0 to send now."
         color: root.dimColor
         font.family: root.panelFontFamily
         font.pixelSize: Style.font.caption
@@ -963,7 +963,7 @@ Column {
     Text {
       width: parent.width
       textFormat: Text.PlainText
-      text: "What this mailbox is called in Omamail — in the switcher, in this "
+      text: "What this mailbox is called in OmamailAI — in the switcher, in this "
         + "list, and beside every message in a combined view. Leave it empty "
         + "to use the address. It is not sent to anyone."
       color: root.dimColor

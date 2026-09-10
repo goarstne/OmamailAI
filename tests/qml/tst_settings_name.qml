@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 // Naming a mailbox.
 //
@@ -46,7 +46,7 @@ Item {
     function setAlwaysRenderHeavyMessages(_value) {}
   }
 
-  Omamail.SettingsPage {
+  OmamailAI.SettingsPage {
     id: page
     width: parent.width
     service: fakeService

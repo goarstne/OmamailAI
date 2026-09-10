@@ -721,7 +721,7 @@ function capabilityCommand() {
 // and the operating system, the hostname and the user are none of its
 // business — RFC 2971 section 3.3 says as much.
 function idCommand() {
-  return "ID (\"name\" \"omamail\")"
+  return "ID (\"name\" \"omamailai\")"
 }
 
 

@@ -36,7 +36,7 @@ assert.strictEqual(sources.validate({
 }).error, "Add a calendar name")
 assert.strictEqual(sources.validate({ kind: "google", accountId: "me@gmail.com" }).ok, true)
 assert.deepStrictEqual(JSON.parse(JSON.stringify(sources.keyringAttributes("nextcloud-personal"))), [
-  "service", "omamail", "kind", "calendar-password", "source", "nextcloud-personal"
+  "service", "omamailai", "kind", "calendar-password", "source", "nextcloud-personal"
 ])
 assert.strictEqual(
   sources.sourceId({ kind: "caldav", url: "https://nextcloud.example/dav/me/personal/" }),

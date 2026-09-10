@@ -1,12 +1,12 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 Item {
   width: 500
   height: 300
 
-  Omamail.RecipientSuggestions {
+  OmamailAI.RecipientSuggestions {
     id: picker
     width: 400
     contacts: [

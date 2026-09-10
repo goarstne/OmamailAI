@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtTest 1.3
 import "transports.js" as Transports
-import "../.." as Omamail
+import "../.." as OmamailAI
 
 // A JMAP sign-in has to leave the account able to sign in again.
 //
@@ -30,13 +30,13 @@ Item {
     function hide(_id) {}
   }
 
-  Omamail.Service {
+  OmamailAI.Service {
     id: mailService
     shell: fakeShell
-    manifest: ({ id: "omamail", __sourceDir: "/tmp/omamail-test" })
+    manifest: ({ id: "omamailai", __sourceDir: "/tmp/omamailai-test" })
   }
 
-  Omamail.App {
+  OmamailAI.App {
     id: app
     service: mailService
     shell: fakeShell

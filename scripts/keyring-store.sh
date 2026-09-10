@@ -39,4 +39,4 @@ if [ "$#" -eq 10 ] \
 fi
 
 printf '%s' "$refresh_token" | secret-tool store \
-  --label='Omamail refresh token' "$@"
+  --label='OmamailAI refresh token' "$@"

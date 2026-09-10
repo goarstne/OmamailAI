@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 // Wheel scrolling, against real scrollers.
 //
@@ -23,7 +23,7 @@ Item {
     contentHeight: 5000
     boundsBehavior: Flickable.StopAtBounds
 
-    Omamail.WheelScroller { view: view }
+    OmamailAI.WheelScroller { view: view }
   }
 
   Flickable {
@@ -35,7 +35,7 @@ Item {
     bottomMargin: 70
     boundsBehavior: Flickable.StopAtBounds
 
-    Omamail.WheelScroller { view: margined }
+    OmamailAI.WheelScroller { view: margined }
   }
 
   ListView {
@@ -46,7 +46,7 @@ Item {
     header: Item { width: 400; height: 200 }
     delegate: Item { width: 400; height: 40 }
 
-    Omamail.WheelScroller { view: headed }
+    OmamailAI.WheelScroller { view: headed }
   }
 
   // --------------------------------------------------- the same, unhandled

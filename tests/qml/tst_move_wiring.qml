@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 
 // The move route through the real objects. Unit tests own each rule; this one
 // catches a forwarding argument or property dropped between App, Service and
@@ -14,13 +14,13 @@ Item {
     function hide(_id) {}
   }
 
-  Omamail.Service {
+  OmamailAI.Service {
     id: mailService
     shell: fakeShell
-    manifest: ({ id: "omamail", __sourceDir: "" })
+    manifest: ({ id: "omamailai", __sourceDir: "" })
   }
 
-  Omamail.App {
+  OmamailAI.App {
     id: app
     service: mailService
     shell: fakeShell

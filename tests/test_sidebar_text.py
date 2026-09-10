@@ -159,7 +159,7 @@ def main():
     server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
     threading.Thread(target=server.serve_forever, daemon=True).start()
     try:
-        with tempfile.TemporaryDirectory(prefix="omamail-sidebar-text-") as directory:
+        with tempfile.TemporaryDirectory(prefix="omamailai-sidebar-text-") as directory:
             source = QML
             for key, path in {
                 "COMPONENTS": "components", "GMAIL": "providers/GmailApi.js",

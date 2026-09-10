@@ -6,7 +6,7 @@ Item {
   QtObject {
     id: credentials
     property string authMode: ""
-    property string pluginDir: "/tmp/omamail-test"
+    property string pluginDir: "/tmp/omamailai-test"
     property var settings: ({ imapHost: "imap.example.com", imapPort: 993, username: "synthetic", insecure: false })
     property int reads: 0
     function withCredentials(callback) { reads++; callback("synthetic:secret", "") }

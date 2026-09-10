@@ -6,7 +6,7 @@ import "../../account/RenderCache.js" as RenderCache
 Item {
   Account.MailAccount {
     id: account
-    pluginDir: "/tmp/omamail-render-cache-test"
+    pluginDir: "/tmp/omamailai-render-cache-test"
     active: false
     windowOpen: false
     bodyMode: "original"

@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtTest 1.3
 import qs.Commons
-import "../.." as Omamail
+import "../.." as OmamailAI
 
 // Where the window is, is a history. Every page is an entry on it, every Back
 // — the bar on a page, Escape, a draft closing — pops one, and the root is
@@ -197,7 +197,7 @@ Item {
     }
   }
 
-  Omamail.App {
+  OmamailAI.App {
     id: app
     service: mailService
     shell: fakeShell

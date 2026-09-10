@@ -21,7 +21,7 @@ report=$(decode "$3")
 case "$url" in https://*) ;; *) fail 'calendar-transport.sh: CalDAV requires HTTPS' ;; esac
 
 umask 077
-work=$(mktemp -d "${TMPDIR:-/tmp}/omamail-calendar.XXXXXX") \
+work=$(mktemp -d "${TMPDIR:-/tmp}/omamailai-calendar.XXXXXX") \
   || fail 'calendar-transport.sh: no temporary directory'
 trap 'rm -rf "$work"' EXIT INT TERM HUP
 

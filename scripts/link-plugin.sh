@@ -2,12 +2,10 @@
 set -euo pipefail
 
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-plugin_id="omamail"
-old_plugin_id="gmail.omarchy"
+plugin_id="omamailai"
 config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
 plugin_home="$config_home/omarchy/plugins"
 install_path="$plugin_home/$plugin_id"
-old_install_path="$plugin_home/$old_plugin_id"
 # Backups must live outside the plugins directory. Omarchy scans every
 # subdirectory of it for a manifest, so a backup left alongside the install is
 # a second plugin with the same id — and the shell then loads the stale copy.
@@ -46,10 +44,6 @@ printf '%s\n' 'Validating plugin…'
 omarchy plugin validate "$project_dir"
 
 mkdir -p "$plugin_home"
-if [[ ! -e "$install_path" && ! -L "$install_path" \
-    && ( -e "$old_install_path" || -L "$old_install_path" ) ]]; then
-  mv "$old_install_path" "$install_path"
-fi
 if [[ -L "$install_path" && "$(readlink -f "$install_path")" == "$project_dir" ]]; then
   :
 elif [[ -e "$install_path" || -L "$install_path" ]]; then
@@ -67,12 +61,12 @@ if $restart_shell; then
   omarchy restart shell
 fi
 
-printf '%s\n' 'Registering Omamail in the bar…'
+printf '%s\n' 'Registering OmamailAI in the bar…'
 omarchy-shell shell rescanPlugins
 omarchy plugin enable "$plugin_id"
 
-printf '%s\n' 'Registering Omamail as the mailto handler…'
-"$project_dir/scripts/register-mailto.sh" "$install_path" --claim-default
+printf '%s\n' 'Registering OmamailAI in the app menu…'
+"$project_dir/scripts/register-mailto.sh" "$install_path"
 
-printf 'Omamail installed for development at %s\n' "$install_path"
-printf '%s\n' 'Click the envelope in the bar. QML edits are read through the symlink.'
+printf 'OmamailAI installed for development at %s\n' "$install_path"
+printf '%s\n' 'Open OmamailAI from the app menu or its envelope in the bar. QML edits are read through the symlink.'

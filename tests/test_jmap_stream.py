@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class StreamBoundary(unittest.TestCase):
     def run_stream(self, wire, split_at=0):
-        work = tempfile.TemporaryDirectory(prefix="omamail-stream-test-")
+        work = tempfile.TemporaryDirectory(prefix="omamailai-stream-test-")
         self.addCleanup(work.cleanup)
         directory = Path(work.name)
         (directory / "wire").write_bytes(wire)

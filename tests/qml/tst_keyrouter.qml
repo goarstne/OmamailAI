@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15 as QQC
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 // The keyboard belongs to the application, and the context says what a key
 // means where. Two things are exercised: that a key is live only in the
@@ -17,7 +17,7 @@ Item {
   property string context: "list"
   property bool overlay: false
 
-  Omamail.KeyRouter {
+  OmamailAI.KeyRouter {
     context: host.context
     overlay: host.overlay
     onTriggered: function(id, sequence) {

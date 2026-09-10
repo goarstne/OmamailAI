@@ -5,7 +5,7 @@ set -eu
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 script="$root/scripts/save-attachment.py"
-work=$(mktemp -d "${TMPDIR:-/tmp}/omamail-attachment-save-test.XXXXXX")
+work=$(mktemp -d "${TMPDIR:-/tmp}/omamailai-attachment-save-test.XXXXXX")
 trap 'rm -rf "$work"' EXIT INT TERM HUP
 
 failures=0

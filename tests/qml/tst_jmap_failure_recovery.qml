@@ -10,7 +10,7 @@ Item {
       property alias api: client
       QtObject {
         id: fakeAuth
-        property string pluginDir: "/tmp/omamail-test"
+        property string pluginDir: "/tmp/omamailai-test"
         property bool loggedIn: false
         property var settings: ({
             sessionUrl: "https://example.org/session",

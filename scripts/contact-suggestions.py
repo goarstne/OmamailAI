@@ -149,7 +149,7 @@ def parse_vcf(path: Path) -> list[dict[str, str]]:
 # harvesting them buries the addresses the user actually corresponds with under
 # a list they never chose. Bcc is left out entirely: in a received message it
 # is either empty or the reader's own address.
-def omamail_cache_records(cache_dir: Path) -> list[dict[str, str]]:
+def omamailai_cache_records(cache_dir: Path) -> list[dict[str, str]]:
     if not cache_dir.is_dir():
         return []
     contacts: list[dict[str, str]] = []
@@ -232,9 +232,9 @@ def json_contacts(path: Path) -> list[dict[str, str]]:
 def main() -> None:
     home = Path(os.environ.get("HOME", "")).expanduser()
     cache_env = os.environ.get("XDG_CACHE_HOME")
-    cache_dir = (Path(cache_env) if cache_env else (home / ".cache")) / "omamail"
+    cache_dir = (Path(cache_env) if cache_env else (home / ".cache")) / "omamailai"
     config_env = os.environ.get("XDG_CONFIG_HOME")
-    config_dir = (Path(config_env) if config_env else (home / ".config")) / "omamail"
+    config_dir = (Path(config_env) if config_env else (home / ".config")) / "omamailai"
     roots = [home / ".thunderbird", home / ".betterbird"]
     contacts: dict[str, dict[str, str]] = {}
 
@@ -253,7 +253,7 @@ def main() -> None:
             for database in databases(profile):
                 collect(records(database))
 
-    collect(omamail_cache_records(cache_dir))
+    collect(omamailai_cache_records(cache_dir))
     collect(json_contacts(config_dir / "contacts.json"))
     collect(parse_vcf(config_dir / "contacts.vcf"))
 

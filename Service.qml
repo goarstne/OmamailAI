@@ -46,7 +46,7 @@ Item {
   property var barWidgetRegistry: null
 
   readonly property string pluginId: manifest && manifest.id
-    ? String(manifest.id) : "omamail"
+    ? String(manifest.id) : "omamailai"
   // Modern Omarchy strips private manifest metadata for third-party plugins.
   // Helpers belong beside this component, independently of host internals.
   readonly property string pluginDir: decodeURIComponent(String(Qt.resolvedUrl("."))
@@ -57,7 +57,7 @@ Item {
   // constructs the service with a stub manifest, and an empty version makes the
   // interface say nothing rather than guess a number.
   readonly property string pluginName: manifest && manifest.name
-    ? String(manifest.name) : "Omamail"
+    ? String(manifest.name) : "OmamailAI"
   readonly property string version: manifest && manifest.version
     ? String(manifest.version) : ""
 
@@ -68,7 +68,7 @@ Item {
     contentDirection: Direction.MODE_DEFAULT,
     defaultQuery: "in:inbox",
     notifyNewMail: "On",
-    oauthPort: 9481,
+    oauthPort: 9482,
     undoSendSeconds: 10,
     unifiedCalendarView: false,
     showBarIcon: true,
@@ -278,7 +278,7 @@ Item {
 
   // Thunderbird and Betterbird keep both explicit and learned addresses in
   // their local profile. The helper reads those databases without modifying
-  // them. Nothing is copied into Omamail's settings or cache.
+  // them. Nothing is copied into OmamailAI's settings or cache.
   property var recipientContacts: []
 
   function refreshRecipientContacts() {
@@ -492,7 +492,7 @@ Item {
   function openNotification(accountId, messageId) {
     if (!Accounts.find(accountList, accountId) || !messageId) return
     if (shell && typeof shell.summon === "function")
-      shell.summon("omamail", JSON.stringify({ accountId: accountId, messageId: messageId }))
+      shell.summon("omamailai", JSON.stringify({ accountId: accountId, messageId: messageId }))
   }
 
   // The switcher selects by position, because that is the only handle a mailbox
@@ -991,13 +991,13 @@ Item {
   // The bar answers for all of them: a badge that counted only the mailbox you
   // happen to be looking at would be worse than none.
   readonly property string barTooltip: {
-    if (!ready) return "Omamail · Not connected"
+    if (!ready) return "OmamailAI · Not connected"
     var suffix = unreadTotal === 0 ? "No unread mail"
       : (unreadTotal === 1 ? "1 unread message" : unreadTotal + " unread messages")
     // The address, whatever the number of mailboxes. How many are configured is
     // not something a tooltip on a mail icon is asked, and the count it used to
     // give was of mailboxes rather than of anything waiting in them.
-    return (accountEmail !== "" ? accountEmail : "Omamail") + " · " + suffix
+    return (accountEmail !== "" ? accountEmail : "OmamailAI") + " · " + suffix
   }
 
   // The switcher's model: every mailbox, its count, and why it is not usable.
@@ -1937,7 +1937,7 @@ Item {
   // Not forwarded to an account: the project exists whether or not anyone has
   // signed in, and the menu offers it on the setup page too.
   function openProjectPage() {
-    Quickshell.execDetached(["xdg-open", "https://github.com/huacnlee/omamail"])
+    Quickshell.execDetached(["xdg-open", "https://github.com/goarstne/OmamailAI"])
   }
 
   function openAuthorPage() {
@@ -2080,7 +2080,7 @@ Item {
     id: windowFile
     path: {
       var home = Quickshell.env("XDG_CONFIG_HOME") || (Quickshell.env("HOME") + "/.config")
-      return home + "/omamail/window.json"
+      return home + "/omamailai/window.json"
     }
     printErrors: false
     onLoaded: root.applyWindowPrefs(text())
@@ -2139,7 +2139,7 @@ Item {
     id: accountsFile
     path: {
       var home = Quickshell.env("XDG_CONFIG_HOME") || (Quickshell.env("HOME") + "/.config")
-      return home + "/omamail/accounts.json"
+      return home + "/omamailai/accounts.json"
     }
     watchChanges: true
     printErrors: false

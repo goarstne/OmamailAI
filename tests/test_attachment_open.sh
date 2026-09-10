@@ -3,7 +3,7 @@ set -eu
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 script="$root/scripts/open-attachment.py"
-work=$(mktemp -d "${TMPDIR:-/tmp}/omamail-attachment-test.XXXXXX")
+work=$(mktemp -d "${TMPDIR:-/tmp}/omamailai-attachment-test.XXXXXX")
 trap 'rm -rf "$work"' EXIT INT TERM HUP
 
 mkdir -p "$work/bin" "$work/runtime"
@@ -34,7 +34,7 @@ opened=$(sed -n '1p' "$work/opened")
 [ "$(basename "$opened")" = "Quarterly report.pdf" ] \
   || { echo "test_attachment_open.sh: unsafe filename was not reduced to its basename" >&2; exit 1; }
 case "$opened" in
-  "$work/runtime"/omamail-attachment-*/Quarterly\ report.pdf) ;;
+  "$work/runtime"/omamailai-attachment-*/Quarterly\ report.pdf) ;;
   *) echo "test_attachment_open.sh: attachment escaped its private runtime directory: $opened" >&2; exit 1 ;;
 esac
 

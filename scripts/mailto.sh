@@ -1,5 +1,5 @@
 #!/bin/sh
-# Hands a mailto: URL to the running Omamail window.
+# Hands a mailto: URL to the running OmamailAI window.
 #
 # The desktop file's Exec is this script with %u. xdg-open, xdg-email and
 # anything else that asks the system to write a message all land here.
@@ -7,7 +7,7 @@
 # draft, not close the mailbox.
 set -eu
 
-plugin_id=omamail
+plugin_id=omamailai
 
 fail() {
   printf '%s\n' "$1" >&2
@@ -15,7 +15,7 @@ fail() {
 }
 
 json_string() {
-  command -v python3 >/dev/null 2>&1 || fail 'omamail: python3 is required to open a mailto link'
+  command -v python3 >/dev/null 2>&1 || fail 'omamailai: python3 is required to open a mailto link'
   python3 -c 'import json,sys; sys.stdout.write(json.dumps(sys.argv[1]))' "$1"
 }
 
@@ -25,10 +25,10 @@ else
   payload="{\"mailto\":$(json_string "$1")}"
 fi
 
-if [ -n "${OMAMAIL_MAILTO_PRINT:-}" ]; then
+if [ -n "${OMAMAILAI_MAILTO_PRINT:-}" ]; then
   printf '%s\n' "omarchy-shell shell summon $plugin_id $payload"
   exit 0
 fi
 
-command -v omarchy-shell >/dev/null 2>&1 || fail 'omamail: omarchy-shell is not on PATH'
+command -v omarchy-shell >/dev/null 2>&1 || fail 'omamailai: omarchy-shell is not on PATH'
 exec omarchy-shell shell summon "$plugin_id" "$payload"

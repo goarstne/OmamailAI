@@ -15,7 +15,7 @@ var AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 var TOKEN_URL = "https://oauth2.googleapis.com/token"
 var REVOKE_URL = "https://oauth2.googleapis.com/revoke"
 
-var DEFAULT_PORT = 9481
+var DEFAULT_PORT = 9482
 var CALLBACK_PATH = "/oauth2callback"
 
 // gmail.modify is read plus label/trash changes — it deliberately cannot
@@ -346,10 +346,10 @@ function httpResponse(statusLine, body) {
 
 function successResponse(theme) {
   return httpResponse("200 OK", themedPage(theme, {
-    title: "Omamail",
+    title: "OmamailAI",
     heading: "Mailbox connected",
     failed: false,
-    body: "<p>Omamail can read this mailbox now. "
+    body: "<p>OmamailAI can read this mailbox now. "
       + "Switch back to the window \u2014 your mail is already loading.</p>"
       + "<p>This tab closes itself. If it stays open, it is safe to close.</p>"
       + "<script>setTimeout(function(){window.close()},600)<\/script>"
@@ -363,6 +363,6 @@ function failureResponse(theme, reason) {
     heading: "Sign-in did not finish",
     failed: true,
     body: "<p>" + (detail ? escapeHtml(detail) : "Google did not complete the authorization.") + "</p>"
-      + "<p>Close this tab and try again from the Omamail window.</p>"
+      + "<p>Close this tab and try again from the OmamailAI window.</p>"
   }))
 }

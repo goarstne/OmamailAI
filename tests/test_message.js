@@ -469,12 +469,12 @@ assert.ok(message.buildRawMessage({ to: "jane@example.com", body: "x" }).indexOf
   })
   assert.ok(signed.indexOf("Content-Type: multipart/related;") > 0, "a picture makes it related")
   assert.ok(signed.indexOf("Content-Type: multipart/alternative;") > 0)
-  assert.ok(signed.indexOf("Content-ID: <sig1@omamail>") > 0)
+  assert.ok(signed.indexOf("Content-ID: <sig1@omamailai>") > 0)
   assert.ok(signed.indexOf("Content-Disposition: inline") > 0)
   const html = Buffer.from(signed.split("Content-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n")[1].split("\r\n--")[0].replace(/\r\n/g, ""), "base64").toString("utf8")
   assert.ok(html.indexOf("Hello &lt;you&gt;") >= 0, "the body is escaped in the HTML part")
   assert.ok(html.indexOf("<b>Ada</b>") > 0, "and the signature markup replaces the plain signature")
-  assert.ok(html.indexOf('src="cid:sig1@omamail"') > 0)
+  assert.ok(html.indexOf('src="cid:sig1@omamailai"') > 0)
   assert.strictEqual(html.indexOf("data:"), -1)
   assert.strictEqual((html.match(/Analyst/g) || []).length, 1, "the plain signature is not repeated under the markup")
   // The two readings agree: a sign-off the writer removed is not put back
@@ -616,7 +616,7 @@ assert.strictEqual(message.buildSendPayload({ to: "a@b.com", draftId: 7 }).draft
   assert.strictEqual(message.messageIdDomain("", "me@signed-in.example"), "signed-in.example")
   assert.strictEqual(message.messageIdDomain("nobody", "me@signed-in.example"),
     "signed-in.example", "a From with no domain falls through to the account")
-  assert.strictEqual(message.messageIdDomain("", ""), "omamail.invalid")
+  assert.strictEqual(message.messageIdDomain("", ""), "omamailai.invalid")
 
   // The two headers read one clock: the id's timestamp is the Date's second.
   const sameClock = headersOf(message.buildRawMessage({ to: "a@b.com", body: "hi" }))
@@ -872,11 +872,11 @@ assert.strictEqual(message.extractHtml({
 
   // No From leaves no domain to take, and .invalid is reserved by RFC 2606 so
   // the id cannot land in a namespace somebody else's uniqueness depends on.
-  assert.ok(/^<[^<>@\s]+@omamail\.invalid>$/.test(
+  assert.ok(/^<[^<>@\s]+@omamailai\.invalid>$/.test(
     idOf(message.buildRawMessage({ to: "a@b.com", body: "x" }))))
   assert.strictEqual(message.messageIdDomain('"Jane" <jane@Example.COM>'), "Example.COM")
-  assert.strictEqual(message.messageIdDomain("nobody"), "omamail.invalid")
-  assert.strictEqual(message.messageIdDomain(""), "omamail.invalid")
+  assert.strictEqual(message.messageIdDomain("nobody"), "omamailai.invalid")
+  assert.strictEqual(message.messageIdDomain(""), "omamailai.invalid")
 
   // Every label in this domain is legal, and the separator between its first
   // two 63-character labels lands at the old arbitrary length ceiling. Cutting

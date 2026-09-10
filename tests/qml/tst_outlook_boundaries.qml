@@ -8,7 +8,7 @@ Item {
   Component {
     id: hostFactory
     Account.MailAccount {
-      pluginDir: "/tmp/omamail-test"
+      pluginDir: "/tmp/omamailai-test"
       providerId: "outlook"
       accountId: "outlook:alice@hotmail.com"
       configuredEmail: "alice@hotmail.com"

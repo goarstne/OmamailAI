@@ -6,7 +6,7 @@ Item {
   Component {
     id: factory
     Providers.OutlookAuth {
-      pluginDir: "/tmp/omamail-test"
+      pluginDir: "/tmp/omamailai-test"
       accountId: "outlook:alice@hotmail.com"
       configuredClientId: "12345678-1234-4abc-9def-1234567890ab"
       configuredEmail: "alice@hotmail.com"
@@ -59,7 +59,7 @@ Item {
     function finishJob(auth) {
       for (var i = 0; i < auth.children.length; i++) {
         var child = auth.children[i]
-        if (child.command && (child.command[0] === "/tmp/omamail-test/scripts/keyring-store.sh"
+        if (child.command && (child.command[0] === "/tmp/omamailai-test/scripts/keyring-store.sh"
             || child.command[1] === "clear")) {
           var command = child.command.slice()
           child.started()

@@ -82,7 +82,7 @@ var CAPABILITIES = {
 // `HeyCli.parseQuery` and by nothing else — everywhere above, they are opaque,
 // handed back to the client that produced them and used as a cache key.
 //
-// The keys are Omamail's rather than HEY's where the two disagree: "inbox" is
+// The keys are OmamailAI's rather than HEY's where the two disagree: "inbox" is
 // the Imbox because `Model.survivesAction` names that key when it decides
 // whether an action evicts a row, and a second name for the first mailbox would
 // have to be taught to every one of those rules.

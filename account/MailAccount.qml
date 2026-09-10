@@ -68,7 +68,7 @@ Item {
     maxMessages: 25,
     defaultQuery: "in:inbox",
     notifyNewMail: "On",
-    oauthPort: 9481,
+    oauthPort: 9482,
     undoSendSeconds: 10
   })
   property var settings: defaultSettingValues
@@ -629,7 +629,7 @@ Item {
       // answer from the window. `sendAsLoaded` stays false, so the next time
       // this account becomes ready or active it tries again.
       if (error) {
-        console.warn("omamail: could not read the send-as addresses:",
+        console.warn("omamailai: could not read the send-as addresses:",
           OAuth.redact(String(error)))
         return
       }

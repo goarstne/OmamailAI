@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 // A signature is placed by the compose view and edited on the settings page,
 // and neither half is reachable from node: one owns a text editor's contents,
@@ -98,7 +98,7 @@ Item {
     }
   }
 
-  Omamail.ComposeView {
+  OmamailAI.ComposeView {
     id: compose
     anchors.fill: parent
     service: mailService
@@ -112,7 +112,7 @@ Item {
     panelFontFamily: "monospace"
   }
 
-  Omamail.SettingsPage {
+  OmamailAI.SettingsPage {
     id: settings
     width: parent.width
     service: mailService

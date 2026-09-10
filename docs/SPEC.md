@@ -1,4 +1,4 @@
-# Omamail — Spec
+# OmamailAI — Spec
 
 A native mail client for Omarchy, built as a Quickshell plugin over the official Gmail API, Microsoft OAuth plus IMAP/SMTP, the HEY CLI, and standard IMAP/SMTP. Same technology as Omarchy-Spotify: QML views over plain-JS logic, running inside the existing `omarchy-shell` process.
 
@@ -31,7 +31,7 @@ Three plugin entry points (`manifest.kinds`):
 | Invitations | **Read from the message's own `text/calendar` part, answered as an RFC 5546 reply.** No calendar API and no second OAuth scope: an RSVP is a mail to the organiser carrying `METHOD:REPLY` and this account's `ATTENDEE` line, which is what every calendar server already listens for — so it works identically on IMAP. Gmail withholds the octets of any part the sender named and Google Calendar names both of the two it sends, so the file itself is one more request, made only for a message that has an invitation in it. Times are resolved through the `VTIMEZONE` the sender ships rather than a timezone database; a zone that arrives without one keeps the organiser's wall clock and names it, instead of showing a conversion nothing backs. |
 | Unsubscribing | **One click where RFC 8058 promises it will work, and only there.** A `List-Unsubscribe-Post` header plus an `https` URL on a public host is a POST that finishes in the window; an address is a message; anything else opens the sender's page, and the label says so. Whether a URL may be fetched is the same judgement that decides whether a message may load a picture. |
 | Sidebar | **An open but narrow icon rail** (148px; 44px collapsed), named by tooltips either way. Collapsing is one click. |
-| Loading | **Cache first, then stream.** Every query, the label list, the profile and opened bodies are kept under `$XDG_CACHE_HOME/omamail`, keyed by query and bound to the mailbox address. Query summaries share one atomically written file and are capped per query; opened bodies live one file each. Switching mailboxes paints immediately and revalidates behind it. A first-time search filters only cached summaries inside the provider's server-search scope, then treats the server ids as authoritative so a stale preview cannot survive or be persisted. Interactive IMAP search reads only the highest UID first and reports one bounded newest range before taking a UID snapshot for any remaining message-bounded searches on a reused connection. Its settled prefix is final, and one queued metadata read feeds small header batches to the list before the rest of the page. A rotating `Searching server` state inside the query field says that this visible answer is still growing, and disappears only after the listing and its outstanding metadata reads have finished. |
+| Loading | **Cache first, then stream.** Every query, the label list, the profile and opened bodies are kept under `$XDG_CACHE_HOME/omamailai`, keyed by query and bound to the mailbox address. Query summaries share one atomically written file and are capped per query; opened bodies live one file each. Switching mailboxes paints immediately and revalidates behind it. A first-time search filters only cached summaries inside the provider's server-search scope, then treats the server ids as authoritative so a stale preview cannot survive or be persisted. Interactive IMAP search reads only the highest UID first and reports one bounded newest range before taking a UID snapshot for any remaining message-bounded searches on a reused connection. Its settled prefix is final, and one queued metadata read feeds small header batches to the list before the rest of the page. A rotating `Searching server` state inside the query field says that this visible answer is still growing, and disappears only after the listing and its outstanding metadata reads have finished. |
 | Setup | **Two steps, one at a time.** Finished steps collapse to a line with a check; the walkthrough hides behind a disclosure. The Publish-app warning stays beside the sign-in button, because it decides whether the session lasts seven days or indefinitely. |
 
 ## Authentication
@@ -40,12 +40,12 @@ Gmail has no shared public client the way Spotify does — Google issues API
 access per Cloud project — so each user creates their own OAuth client once,
 guided by an in-app four-step walkthrough.
 
-- Authorization Code + PKCE, loopback redirect `http://127.0.0.1:9481/oauth2callback`
+- Authorization Code + PKCE, loopback redirect `http://127.0.0.1:9482/oauth2callback`
 - Listener is a single-shot `socat`; the browser does the rest
 - Scopes: `gmail.modify` (read, label, archive, trash — cannot permanently
   delete), `gmail.send` and `calendar.events` (read calendars, write events)
 - Refresh token → GNOME Keyring via `secret-tool`, keyed by client and account
-- Client id/secret → `~/.config/omamail/credentials.json`, mode 0600.
+- Client id/secret → `~/.config/omamailai/credentials.json`, mode 0600.
   Not plugin settings: `shell.json` is world-readable.
 - Access token → process memory only
 

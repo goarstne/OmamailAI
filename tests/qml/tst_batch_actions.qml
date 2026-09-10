@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 import "../../account/Accounts.js" as Accounts
 
 // The batch's two boundaries, driven against a client the test controls.
@@ -75,13 +75,13 @@ Item {
     }
   }
 
-  Omamail.Service {
+  OmamailAI.Service {
     id: mailService
     shell: shellStore
-    manifest: ({ id: "omamail", __sourceDir: "/tmp/omamail-test" })
+    manifest: ({ id: "omamailai", __sourceDir: "/tmp/omamailai-test" })
   }
 
-  Omamail.App { id: app; service: mailService }
+  OmamailAI.App { id: app; service: mailService }
 
   TestCase {
     name: "BatchActions"
@@ -159,7 +159,7 @@ Item {
       account.selectedMessage = account.messages[0]
       app.open()
       app.pushEntry("reader", { id: account.selectedId })
-      var window = having(app, function(item) { return item.title === "Omamail" })
+      var window = having(app, function(item) { return item.title === "OmamailAI" })
       var reader = having(app, function(item) { return item.forceRichAnyway !== undefined })
       verify(window !== null && reader !== null)
       window.width = 980
@@ -299,7 +299,7 @@ Item {
       account.selectedId = data.outside ? "3:INBOX" : "1:INBOX"
       account.selectedMessage = messages[data.outside ? 2 : 0]
       app.open()
-      var window = having(app, function(item) { return item.title === "Omamail" })
+      var window = having(app, function(item) { return item.title === "OmamailAI" })
       verify(window !== null)
       window.width = data.compact ? 600 : 980
       app.pushEntry("reader", { id: account.selectedId })

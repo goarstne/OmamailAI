@@ -45,8 +45,8 @@ with tempfile.TemporaryDirectory() as temporary:
         ],
     )
 
-    # Also create omamail cache and contacts.json
-    cache_dir = home / ".cache" / "omamail"
+    # Also create omamailai cache and contacts.json
+    cache_dir = home / ".cache" / "omamailai"
     cache_dir.mkdir(parents=True)
     (cache_dir / "account-test.json").write_text(
         json.dumps({
@@ -65,7 +65,7 @@ with tempfile.TemporaryDirectory() as temporary:
         encoding="utf-8"
     )
 
-    config_dir = home / ".config" / "omamail"
+    config_dir = home / ".config" / "omamailai"
     config_dir.mkdir(parents=True)
     (config_dir / "contacts.json").write_text(
         json.dumps([{"name": "Local Friend", "email": "friend@local.net"}]),
@@ -174,7 +174,7 @@ with tempfile.TemporaryDirectory() as temporary:
         ]}}}),
         encoding="utf-8",
     )
-    harvested = harvester.omamail_cache_records(cache)
+    harvested = harvester.omamailai_cache_records(cache)
     addresses = sorted(row["email"] for row in harvested)
     assert addresses == ["jane@example.com", "me@example.com", "noreply@example.com"], addresses
     by_email = {row["email"]: row["name"] for row in harvested}

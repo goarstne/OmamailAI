@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 // A named mailbox in the switcher.
 //
@@ -24,7 +24,7 @@ Item {
       unread: 0, active: false, signedIn: true, busy: false, error: "the server refused that" }
   ]
 
-  Omamail.AccountSwitcher {
+  OmamailAI.AccountSwitcher {
     id: switcher
     anchors.fill: parent
     textColor: Qt.rgba(1, 1, 1, 1)

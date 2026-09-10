@@ -1062,7 +1062,7 @@ function mimeBoundary(given) {
   var stated = String(given || "").replace(/[^A-Za-z0-9'()+_,\-.\/:=?]/g, "")
   if (stated !== "") return stated.substring(0, 60)
   var random = Math.floor(Math.random() * 0x100000000).toString(36)
-  return "=_Omamail_" + (new Date()).getTime().toString(36) + "_" + random
+  return "=_OmamailAI_" + (new Date()).getTime().toString(36) + "_" + random
 }
 
 // The domain of an address, reduced to the characters a domain may hold, or
@@ -1083,7 +1083,7 @@ function addressDomain(value) {
 function messageIdDomain(from, accountAddress) {
   var domain = addressDomain(from) || addressDomain(accountAddress)
   // RFC 2606 reserves .invalid, so a message with no address at all borrows no domain that belongs to somebody else.
-  return domain === "" ? "omamail.invalid" : domain
+  return domain === "" ? "omamailai.invalid" : domain
 }
 
 // Unique by the rule mimeBoundary already uses, and the caller may state one, which is what lets a test read it.
@@ -1095,7 +1095,7 @@ function messageIdValue(given, from, nowMs, accountAddress) {
     return stated
   var now = Math.floor(Number(nowMs) || Date.now())
   var random = Math.floor(Math.random() * 0x100000000).toString(36)
-  return "<" + now.toString(36) + "." + random + ".omamail@"
+  return "<" + now.toString(36) + "." + random + ".omamailai@"
     + messageIdDomain(from, accountAddress) + ">"
 }
 

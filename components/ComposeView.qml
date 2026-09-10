@@ -154,7 +154,7 @@ DropArea {
     var cache = Quickshell.env("XDG_CACHE_HOME")
     var home = Quickshell.env("HOME")
     var rootDir = cache !== "" ? cache : (home + "/.cache")
-    return rootDir + "/omamail/compose"
+    return rootDir + "/omamailai/compose"
   }
 
   readonly property var contactBook: root.service

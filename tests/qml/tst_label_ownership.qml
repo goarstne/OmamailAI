@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 import "../../account/Accounts.js" as Accounts
 
 // A label change goes to the account whose menu asked for it. Ada and Bob
@@ -84,13 +84,13 @@ Item {
     }
   }
 
-  Omamail.Service {
+  OmamailAI.Service {
     id: mailService
     shell: shellStore
-    manifest: ({ id: "omamail", __sourceDir: "/tmp/omamail-test" })
+    manifest: ({ id: "omamailai", __sourceDir: "/tmp/omamailai-test" })
   }
 
-  Omamail.App { id: app; service: mailService }
+  OmamailAI.App { id: app; service: mailService }
 
   TestCase {
     name: "LabelOwnership"

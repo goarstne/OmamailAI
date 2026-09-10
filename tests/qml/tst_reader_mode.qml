@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 import "../../message/Html.js" as Html
 
 // Three ways of reading one message, and the two things that must stay true
@@ -68,7 +68,7 @@ Item {
     function showRemoteImages() { renders++ }
   }
 
-  Omamail.MessageReader {
+  OmamailAI.MessageReader {
     id: reader
     // Sized rather than anchored: the panel's width is what these tests move.
     width: 900

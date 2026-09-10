@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 
 Item {
   width: 900
@@ -160,7 +160,7 @@ Item {
     signal replyFailed()
   }
 
-  Omamail.App {
+  OmamailAI.App {
     id: app
     service: mailService
   }

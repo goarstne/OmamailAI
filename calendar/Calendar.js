@@ -468,7 +468,7 @@ function validateEventFields(fields) {
 }
 
 function veventLines(uid, sequence, stampMs, fields, rule, allDay) {
-  var lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Omamail//Calendar//EN",
+  var lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//OmamailAI//Calendar//EN",
     "BEGIN:VEVENT", "UID:" + uid, "DTSTAMP:" + icsUtc(stampMs)]
   if (sequence > 0) lines.push("SEQUENCE:" + sequence)
   // An all-day event is dates with an exclusive end, never midnight times.
@@ -519,7 +519,7 @@ function createEvent(fields, nowMs) {
   if (!checked.ok) return checked
   var recurrence = recurrenceRule((fields || {}).recurrence)
   if (!recurrence.ok) return recurrence
-  var uid = "omamail-" + Math.floor(Number(nowMs) || Date.now())
+  var uid = "omamailai-" + Math.floor(Number(nowMs) || Date.now())
   var result = {
     ok: true, uid: uid,
     ics: veventLines(uid, 0, Number(nowMs) || Date.now(), checked, recurrence.rule).join("\r\n"),

@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 import "../../account/Accounts.js" as Accounts
 
 // A job belongs to the account that asked. Ada and Bob both hold 42:INBOX;
@@ -18,10 +18,10 @@ Item {
     function hide(_id) {}
   }
 
-  Omamail.Service {
+  OmamailAI.Service {
     id: mailService
     shell: shellStore
-    manifest: ({ id: "omamail", __sourceDir: "/tmp/omamail-test" })
+    manifest: ({ id: "omamailai", __sourceDir: "/tmp/omamailai-test" })
   }
 
   TestCase {
@@ -88,10 +88,11 @@ Item {
 
     function test_public_manifest_resolves_local_helper_directory() {
       var saved = mailService.manifest
-      mailService.manifest = {id:"omamail",name:"Omamail"}
+      mailService.manifest = {id:"omamailai",name:"OmamailAI"}
       verify(mailService.pluginDir !== "", "Modern shell removes internal source metadata")
       verify(mailService.pluginDir.indexOf("file:") !== 0)
-      verify(mailService.pluginDir.indexOf("/omamail") >= 0)
+      compare(mailService.pluginDir, decodeURIComponent(String(Qt.resolvedUrl("../../"))
+        .replace(/^file:\/\//, "")).replace(/\/$/, ""))
       mailService.manifest = saved
     }
 

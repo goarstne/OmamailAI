@@ -122,7 +122,7 @@ Item {
 
   readonly property string configPath: {
     var home = Quickshell.env("XDG_CONFIG_HOME") || (Quickshell.env("HOME") + "/.config")
-    return home + "/omamail/calendars.json"
+    return home + "/omamailai/calendars.json"
   }
 
   function refresh(startMs, endMs) {

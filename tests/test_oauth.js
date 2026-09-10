@@ -8,14 +8,14 @@ const oauth = load("providers/OAuth.js")
 // The port is user-editable in plugin settings, so anything outside the
 // unprivileged range has to fall back rather than fail at listen time.
 
-assert.strictEqual(oauth.normalizedPort(9481), 9481)
-assert.strictEqual(oauth.normalizedPort("9481"), 9481)
-assert.strictEqual(oauth.normalizedPort(80), 9481, "privileged ports fall back")
-assert.strictEqual(oauth.normalizedPort(70000), 9481)
-assert.strictEqual(oauth.normalizedPort(""), 9481)
-assert.strictEqual(oauth.normalizedPort(null), 9481)
-assert.strictEqual(oauth.redirectUri(9481), "http://127.0.0.1:9481/oauth2callback")
-assert.strictEqual(oauth.redirectUri(0), "http://127.0.0.1:9481/oauth2callback")
+assert.strictEqual(oauth.normalizedPort(9482), 9482)
+assert.strictEqual(oauth.normalizedPort("9482"), 9482)
+assert.strictEqual(oauth.normalizedPort(80), 9482, "privileged ports fall back")
+assert.strictEqual(oauth.normalizedPort(70000), 9482)
+assert.strictEqual(oauth.normalizedPort(""), 9482)
+assert.strictEqual(oauth.normalizedPort(null), 9482)
+assert.strictEqual(oauth.redirectUri(9482), "http://127.0.0.1:9482/oauth2callback")
+assert.strictEqual(oauth.redirectUri(0), "http://127.0.0.1:9482/oauth2callback")
 
 // ------------------------------------------------------- authorization URL
 
@@ -23,7 +23,7 @@ const url = oauth.authorizationUrl({
   clientId: "123-abc.apps.googleusercontent.com",
   challenge: "CHALLENGE",
   state: "STATE",
-  port: 9481
+  port: 9482
 })
 
 assert.ok(url.indexOf("https://accounts.google.com/o/oauth2/v2/auth?") === 0)
@@ -34,7 +34,7 @@ assert.ok(url.indexOf("include_granted_scopes=true") > 0,
 // Without prompt=consent Google issues a refresh token only on the very first
 // authorization, so a reinstall would leave the plugin unable to stay signed in.
 assert.ok(url.indexOf("prompt=consent") > 0)
-assert.ok(url.indexOf("redirect_uri=http%3A%2F%2F127.0.0.1%3A9481%2Foauth2callback") > 0)
+assert.ok(url.indexOf("redirect_uri=http%3A%2F%2F127.0.0.1%3A9482%2Foauth2callback") > 0)
 assert.ok(url.indexOf("scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgmail.modify%20") > 0)
 assert.ok(url.indexOf("https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar.events") > 0)
 assert.ok(url.indexOf("login_hint") < 0, "an absent hint is omitted, not sent empty")

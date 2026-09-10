@@ -10,7 +10,7 @@ set -eu
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 script="$root/scripts/jmap-transport.sh"
-work=$(mktemp -d "${TMPDIR:-/tmp}/omamail-jmap-transport-test.XXXXXX")
+work=$(mktemp -d "${TMPDIR:-/tmp}/omamailai-jmap-transport-test.XXXXXX")
 trap 'rm -rf "$work"' EXIT INT TERM HUP
 
 mkdir -p "$work/bin"
@@ -416,23 +416,23 @@ equals "a status with no redirect is the code alone" \
 # only those: one written just now belongs to a request still running.
 
 stale_home="$work/tmp"
-mkdir -p "$stale_home/omamail-jmap.stale" "$stale_home/omamail-jmap.fresh" "$stale_home/omamail-other.stale"
-touch -t 202001010000 "$stale_home/omamail-jmap.stale" "$stale_home/omamail-other.stale"
+mkdir -p "$stale_home/omamailai-jmap.stale" "$stale_home/omamailai-jmap.fresh" "$stale_home/omamailai-other.stale"
+touch -t 202001010000 "$stale_home/omamailai-jmap.stale" "$stale_home/omamailai-other.stale"
 printf '%s\n' "$request" | TMPDIR="$stale_home" PATH="$work/bin:$PATH" sh "$script" >/dev/null
-if [ -d "$stale_home/omamail-jmap.stale" ]; then
+if [ -d "$stale_home/omamailai-jmap.stale" ]; then
   printf '  FAIL %s\n' "a work directory left an hour ago is swept"
   failures=$((failures + 1))
 else
   printf '  ok   %s\n' "a work directory left an hour ago is swept"
 fi
-if [ -d "$stale_home/omamail-jmap.fresh" ] && [ -d "$stale_home/omamail-other.stale" ]; then
+if [ -d "$stale_home/omamailai-jmap.fresh" ] && [ -d "$stale_home/omamailai-other.stale" ]; then
   printf '  ok   %s\n' "a fresh one, and anything not ours, is left alone"
 else
   printf '  FAIL %s\n' "a fresh one, and anything not ours, is left alone"
   failures=$((failures + 1))
 fi
 equals "the request's own directory is gone with the request" \
-  "$(find "$stale_home" -maxdepth 1 -name 'omamail-jmap.*' | wc -l | tr -d ' ')" 1
+  "$(find "$stale_home" -maxdepth 1 -name 'omamailai-jmap.*' | wc -l | tr -d ' ')" 1
 
 # Under the runtime directory when there is one — the user's own, cleared when
 # the session ends — and TMPDIR still wins when somebody set it.
@@ -441,11 +441,11 @@ upload_request="upload $(b64 "$API_URL/upload/t/") $(b64 basic) $(b64 jane) $(b6
 config=$(printf '%s\n' "$upload_request" \
   | env -u TMPDIR XDG_RUNTIME_DIR="$work/run" PATH="$work/bin:$PATH" sh "$script" \
   | sed -n '3p' | base64 -d)
-check "the work directory is under the runtime directory" "$config" "upload-file = \"$work/run/omamail-jmap."
+check "the work directory is under the runtime directory" "$config" "upload-file = \"$work/run/omamailai-jmap."
 config=$(printf '%s\n' "$upload_request" \
   | TMPDIR="$work/tmp" XDG_RUNTIME_DIR="$work/run" PATH="$work/bin:$PATH" sh "$script" \
   | sed -n '3p' | base64 -d)
-check "unless TMPDIR says otherwise" "$config" "upload-file = \"$work/tmp/omamail-jmap."
+check "unless TMPDIR says otherwise" "$config" "upload-file = \"$work/tmp/omamailai-jmap."
 
 # --------------------------------------------------------------------- retrying
 #

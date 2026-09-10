@@ -82,19 +82,19 @@ function setupDetail(state, missingTools, reason, provider, authKind) {
   if (state === "tools_missing") {
     var tools = Array.isArray(missingTools) ? missingTools.join(", ") : ""
     if (authKind === "cli")
-      return "HEY does not speak IMAP or POP, so Omamail reads it through the "
+      return "HEY does not speak IMAP or POP, so OmamailAI reads it through the "
         + "HEY CLI, the client 37signals publish for exactly this. Install it, "
         + "then come back — nothing else here needs setting up."
-    return "Omamail needs " + (tools || "a few base tools")
+    return "OmamailAI needs " + (tools || "a few base tools")
       + " on PATH before it can sign in."
   }
   if (state === "no_credentials") {
     if (authKind === "password")
       return "Enter the server and the password for this mailbox. Most providers want an app password rather than the one you sign in to the website with."
     if (authKind === "cli")
-      return "The HEY CLI is installed. Signing in opens HEY in your browser; the token it comes back with is the CLI's own, and Omamail never sees it."
+      return "The HEY CLI is installed. Signing in opens HEY in your browser; the token it comes back with is the CLI's own, and OmamailAI never sees it."
     if (name === "Outlook")
-      return "Add the mailbox and a Microsoft public-client ID. Sign-in happens on Microsoft's page; Omamail never sees the account password."
+      return "Add the mailbox and a Microsoft public-client ID. Sign-in happens on Microsoft's page; OmamailAI never sees the account password."
     return "Gmail has no shared app to sign in through, so this plugin uses an OAuth client you own. It takes about two minutes to create."
   }
   if (state === "signing_in") {
@@ -111,7 +111,7 @@ function setupDetail(state, missingTools, reason, provider, authKind) {
     return "Your OAuth client is ready. Sign in to let it read this mailbox."
   }
   if (state === "reconnecting")
-    return "The saved session is intact. Omamail will retry automatically when the network is available."
+    return "The saved session is intact. OmamailAI will retry automatically when the network is available."
   return ""
 }
 

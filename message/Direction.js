@@ -315,7 +315,7 @@ function resolveSubject(subject, mode) {
 // flattens a document by writing `[image 1]` where a picture stood, and a
 // remote image is blocked until the reader asks for it — so an HTML newsletter
 // that opens with a logo, which is most of them, hands this a string beginning
-// with a Latin `i` that omamail wrote itself.
+// with a Latin `i` that omamailai wrote itself.
 //
 // That is the same mistake as reading `Re:` as part of a subject, on the body
 // side: a marker this client put there is not the message saying which way it

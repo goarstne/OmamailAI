@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 Item {
   width: 700
@@ -78,7 +78,7 @@ Item {
     function openInBrowser(id) { browsedId = String(id) }
   }
 
-  Omamail.MessageReader {
+  OmamailAI.MessageReader {
     id: reader
     anchors.fill: parent
     visible: false

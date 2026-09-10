@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 
 // First run has no mailbox to fall back to, so a setup form is the whole
 // window. The one place behind it is the question it answered — which kind of
@@ -138,7 +138,7 @@ Item {
     function note(text) { actionStatus = String(text || "") }
   }
 
-  Omamail.App {
+  OmamailAI.App {
     id: app
     service: mailService
   }

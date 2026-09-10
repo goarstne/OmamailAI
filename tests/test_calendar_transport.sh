@@ -2,7 +2,7 @@
 set -euo pipefail
 
 project_dir=$(cd "$(dirname "$0")/.." && pwd)
-work=$(mktemp -d /tmp/omamail-calendar-test.XXXXXX)
+work=$(mktemp -d /tmp/omamailai-calendar-test.XXXXXX)
 trap 'rm -rf "$work"' EXIT
 
 mkdir -p "$work/bin"

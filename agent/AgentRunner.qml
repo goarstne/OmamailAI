@@ -74,7 +74,7 @@ Item {
   // directory and the background request. The listing follows straight away, so the row
   // shows the job before the poll would have found it.
   function start(payloadLine) {
-    if (pluginDir === "") { lastError = "Omamail could not locate its AI helper. Reload the plugin."; return false }
+    if (pluginDir === "") { lastError = "OmamailAI could not locate its AI helper. Reload the plugin."; return false }
     if (starter.running) { lastError = "AI is still starting. Try again shortly."; return false }
     lastError = ""
     startTimedOut = false

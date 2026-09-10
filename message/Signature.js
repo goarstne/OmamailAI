@@ -197,7 +197,7 @@ function inlineParts(html, prefix) {
   var stem = String(prefix || "sig")
   var out = text.replace(/src="data:(image\/(?:png|jpe?g|gif|webp));base64,([A-Za-z0-9+\/=]+)"/gi,
     function(all, mime, data) {
-      var id = stem + (parts.length + 1) + "@omamail"
+      var id = stem + (parts.length + 1) + "@omamailai"
       parts.push({ cid: id, mimeType: mime.toLowerCase(), data: data })
       return "src=\"cid:" + id + "\""
     })

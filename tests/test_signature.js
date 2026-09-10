@@ -84,9 +84,9 @@ assert.ok(signature.importHtml("").problem !== "")
 {
   const swapped = signature.inlineParts('<p><img src="data:image/png;base64,' + PNG + '"> and <img src="data:image/gif;base64,' + GIF + '"></p>', "sig")
   assert.strictEqual(swapped.parts.length, 2)
-  assert.strictEqual(swapped.parts[0].cid, "sig1@omamail")
+  assert.strictEqual(swapped.parts[0].cid, "sig1@omamailai")
   assert.strictEqual(swapped.parts[1].mimeType, "image/gif")
-  assert.ok(swapped.html.indexOf('src="cid:sig1@omamail"') > 0)
+  assert.ok(swapped.html.indexOf('src="cid:sig1@omamailai"') > 0)
   assert.strictEqual(swapped.html.indexOf("data:"), -1)
   deepEqual(signature.inlineParts("<p>no images</p>").parts, [])
 }

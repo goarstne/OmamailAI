@@ -1,5 +1,5 @@
 #!/bin/sh
-# Writes one line from stdin to $XDG_CONFIG_HOME/omamail/<name> with
+# Writes one line from stdin to $XDG_CONFIG_HOME/omamailai/<name> with
 # owner-only permissions.
 #
 # No file it writes is world-readable: a desktop client's secret is only
@@ -24,7 +24,7 @@ esac
 umask 077
 
 config_home=${XDG_CONFIG_HOME:-$HOME/.config}
-target_dir="$config_home/omamail"
+target_dir="$config_home/omamailai"
 target="$target_dir/$name"
 
 IFS= read -r payload

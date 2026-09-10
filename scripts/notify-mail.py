@@ -22,11 +22,11 @@ def main(args):
         return 2
     foreground, accent, _, title, body = args
     cache = Path(os.environ.get('XDG_CACHE_HOME') or Path.home() / '.cache')
-    directory = cache / 'omamail' / 'notification-icons'
+    directory = cache / 'omamailai' / 'notification-icons'
     directory.mkdir(mode=0o700, parents=True, exist_ok=True)
     # A new path per palette also prevents image caches retaining the old theme.
     path = directory / (foreground[1:] + '-' + accent[1:] + '.svg')
-    svg = ET.parse(Path(__file__).resolve().parents[1] / 'assets/omamail.svg')
+    svg = ET.parse(Path(__file__).resolve().parents[1] / 'assets/omamailai.svg')
     paint(svg.getroot()[0], foreground)
     paint(svg.getroot()[1], accent)
     # Atomic publication: concurrent accounts must never see a partial image.
@@ -40,7 +40,7 @@ def main(args):
         if temporary and os.path.exists(temporary):
             os.unlink(temporary)
     # Preserve notify-send's stdout action and lifetime for the QML waiter.
-    os.execvp('notify-send', ['notify-send', '-a', 'Omamail', '-i', str(path),
+    os.execvp('notify-send', ['notify-send', '-a', 'OmamailAI', '-i', str(path),
                             '--action=default=Read...', '--', title, body])
 
 

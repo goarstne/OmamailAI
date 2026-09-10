@@ -1,6 +1,6 @@
 import QtQuick
 import QtTest
-import "../.." as Omamail
+import "../.." as OmamailAI
 import "../../account/Accounts.js" as Accounts
 
 Item {
@@ -13,10 +13,10 @@ Item {
   }
   Component {
     id: serviceComponent
-    Omamail.Service {
+    OmamailAI.Service {
       shell: store
       manifest: ({
-          id: "omamail",
+          id: "omamailai",
           __sourceDir: "/tmp/synthetic"
         })
       property int passwordCalls: 0

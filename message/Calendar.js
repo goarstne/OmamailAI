@@ -1087,7 +1087,7 @@ function buildReply(invite, me, response, nowMs) {
   if (address === "") return ""
   var name = displayNameOf(me)
 
-  var lines = ["BEGIN:VCALENDAR", "PRODID:-//Omamail//Omamail//EN", "VERSION:2.0", "METHOD:REPLY"]
+  var lines = ["BEGIN:VCALENDAR", "PRODID:-//OmamailAI//OmamailAI//EN", "VERSION:2.0", "METHOD:REPLY"]
 
   var zones = invite.source && Array.isArray(invite.source.timezones) ? invite.source.timezones : []
   for (var z = 0; z < zones.length; z++) lines = lines.concat(zones[z].split("\r\n"))

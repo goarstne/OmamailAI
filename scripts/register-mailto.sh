@@ -1,5 +1,5 @@
 #!/bin/sh
-# Registers Omamail as the desktop handler for mailto: links.
+# Registers OmamailAI as the desktop handler for mailto: links.
 #
 # The plugin is not an installed application until this file exists: XDG only
 # offers handlers that ship a .desktop claiming the scheme. The Exec path is
@@ -24,29 +24,25 @@ while [ "$#" -gt 0 ]; do
 done
 plugin_dir=$(cd "$plugin_dir" && pwd)
 [ -x "$plugin_dir/scripts/mailto.sh" ] || fail 'register-mailto.sh: mailto.sh is missing'
-[ -f "$plugin_dir/assets/omamail.svg" ] || fail 'register-mailto.sh: omamail.svg is missing'
+[ -f "$plugin_dir/assets/omamailai.svg" ] || fail 'register-mailto.sh: omamailai.svg is missing'
 
 data_home=${XDG_DATA_HOME:-${HOME:?}/.local/share}
 apps="$data_home/applications"
 mkdir -p "$apps"
-desktop="$apps/omamail.desktop"
-# First appearance on the machine claims mailto. Later starts refresh the
-# Exec path and leave a default the user has since changed alone.
-if [ ! -f "$desktop" ]; then
-  claim_default=true
-fi
+desktop="$apps/omamailai.desktop"
+# Register the app without changing the user's default mail client.
 
 cat > "$desktop" <<EOF
 [Desktop Entry]
 Type=Application
-Name=Omamail
-Comment=Email client for Omarchy
+Name=OmamailAI
+Comment=Email client with AI assistance for Omarchy
 Exec=$plugin_dir/scripts/mailto.sh %u
-Icon=$plugin_dir/assets/omamail.svg
+Icon=$plugin_dir/assets/omamailai.svg
 Terminal=false
 StartupNotify=false
 MimeType=x-scheme-handler/mailto;
-Categories=Office;Network;Email;
+Categories=Network;Email;
 EOF
 
 if command -v update-desktop-database >/dev/null 2>&1; then
@@ -55,9 +51,9 @@ fi
 
 if [ "$claim_default" = true ]; then
   if command -v xdg-mime >/dev/null 2>&1; then
-    xdg-mime default omamail.desktop x-scheme-handler/mailto >/dev/null 2>&1 || true
+    xdg-mime default omamailai.desktop x-scheme-handler/mailto >/dev/null 2>&1 || true
   fi
   if command -v xdg-settings >/dev/null 2>&1; then
-    xdg-settings set default-url-scheme-handler mailto omamail.desktop >/dev/null 2>&1 || true
+    xdg-settings set default-url-scheme-handler mailto omamailai.desktop >/dev/null 2>&1 || true
   fi
 fi

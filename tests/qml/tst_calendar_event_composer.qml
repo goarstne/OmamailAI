@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 Item {
   width: 900
@@ -36,7 +36,7 @@ Item {
     }
   }
 
-  Omamail.CalendarEventComposer {
+  OmamailAI.CalendarEventComposer {
     id: composer
     anchors.fill: parent
     controller: eventController

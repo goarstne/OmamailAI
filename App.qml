@@ -36,11 +36,11 @@ Item {
   property string draftSavedNotice: ""
 
   readonly property string pluginId: manifest && manifest.id
-    ? String(manifest.id) : "omamail"
+    ? String(manifest.id) : "omamailai"
   readonly property string composeRecoveryPath: {
     var config = Quickshell.env("XDG_CONFIG_HOME")
       || (Quickshell.env("HOME") + "/.config")
-    return config + "/omamail/compose.json"
+    return config + "/omamailai/compose.json"
   }
   property var composeRecovery: Recovery.empty()
   property bool composeRecoveryLoaded: false
@@ -1623,7 +1623,7 @@ Item {
   FloatingWindow {
     id: window
     visible: root.opened
-    title: "Omamail"
+    title: "OmamailAI"
     color: root.background
     implicitWidth: Style.space(980)
     implicitHeight: Style.space(720)
@@ -1747,7 +1747,7 @@ Item {
           Text {
             anchors.verticalCenter: parent.verticalCenter
             visible: !root.compact
-            text: "Omamail"
+            text: "OmamailAI"
             color: root.foreground
             font.family: root.fontFamily
             font.pixelSize: Style.font.title

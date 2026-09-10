@@ -1,14 +1,14 @@
-# Omamail Architecture
+# OmamailAI Architecture
 
-This document describes how Omamail is divided, where state belongs, and how components communicate. It is an engineering guide rather than a product specification. `SPEC.md` says what the product promises; `DESIGN.md` says how the interface behaves and is laid out; this document says which part of the program owns each decision.
+This document describes how OmamailAI is divided, where state belongs, and how components communicate. It is an engineering guide rather than a product specification. `SPEC.md` says what the product promises; `DESIGN.md` says how the interface behaves and is laid out; this document says which part of the program owns each decision.
 
-Except for visual styling, GPUI and GPUI Component provide the default architectural model for Omamail. Their principles of stable identity, explicit state ownership, contextual actions, controlled values, semantic events, composable parts, behavior/presentation separation, lifecycle safety, precise vocabulary, and testable decisions apply here unless a Qt or shell constraint proves otherwise. Omamail translates those principles into QML properties, signals, JavaScript libraries, and Qt lifecycle rather than reproducing Rust APIs.
+Except for visual styling, GPUI and GPUI Component provide the default architectural model for OmamailAI. Their principles of stable identity, explicit state ownership, contextual actions, controlled values, semantic events, composable parts, behavior/presentation separation, lifecycle safety, precise vocabulary, and testable decisions apply here unless a Qt or shell constraint proves otherwise. OmamailAI translates those principles into QML properties, signals, JavaScript libraries, and Qt lifecycle rather than reproducing Rust APIs.
 
-Use the [GPUI Component Coding Guides](http://longbridge.github.io/gpui-component/docs/coding-guides) for the full architecture, state, lifecycle, naming, API, and testing guidance. This document keeps the Omamail module mapping and the places where QML, Qt, the shell, or the mail domain changes its application.
+Use the [GPUI Component Coding Guides](http://longbridge.github.io/gpui-component/docs/coding-guides) for the full architecture, state, lifecycle, naming, API, and testing guidance. This document keeps the OmamailAI module mapping and the places where QML, Qt, the shell, or the mail domain changes its application.
 
 ## Architectural position
 
-Omamail is a stateful desktop application hosted as an Omarchy shell plugin. Its architecture has five layers:
+OmamailAI is a stateful desktop application hosted as an Omarchy shell plugin. Its architecture has five layers:
 
 1. The shell entry points connect Omarchy to the application.
 2. The window composition owns window state, navigation, action dispatch, and top-level layout.
@@ -59,11 +59,11 @@ Stable identity matters wherever state outlives a render. A mailbox, message, me
 
 ### Controlled state and feedback
 
-Follow the Coding Guides' controlled-state and feedback-loop rules. In Omamail, QML property bindings carry the owner value and signals report user intent; synchronizing search text, selection, open state, or filters must not echo the owner value as a second user change. Treat a signal handler as re-entrant because it may switch the account, replace the model, close the popup, or destroy its sender.
+Follow the Coding Guides' controlled-state and feedback-loop rules. In OmamailAI, QML property bindings carry the owner value and signals report user intent; synchronizing search text, selection, open state, or filters must not echo the owner value as a second user change. Treat a signal handler as re-entrant because it may switch the account, replace the model, close the popup, or destroy its sender.
 
 ## Actions and contexts
 
-The existing keyboard architecture is the clearest GPUI-derived part of Omamail and is the model for other interactions.
+The existing keyboard architecture is the clearest GPUI-derived part of OmamailAI and is the model for other interactions.
 
 - `keys/Keymap.js` declares actions, bindings, and the contexts in which they mean something.
 - `components/KeyRouter.qml` turns that declaration into window shortcuts.
@@ -90,13 +90,13 @@ Modules are grouped by responsibility rather than language or file type:
 
 Rules that parse, format, choose, clamp, or otherwise decide belong in `.js` libraries whenever they can. QML binds state and renders results. This is more than a testing convenience: it keeps behavior independent of compositor and widget lifecycle, in the same spirit as separating GPUI entity state from an element's layout and paint passes.
 
-Reusable behavior and presentation remain separate without introducing a framework layer merely to name that separation. JavaScript owns portable decisions and state transitions; QML components own Qt lifecycle and input mechanics; feature views supply Omamail composition; semantic properties supplied from `App.qml` carry the Omarchy presentation. This is the `gpui-base` and `gpui-component` seam expressed through the units this repository already has.
+Reusable behavior and presentation remain separate without introducing a framework layer merely to name that separation. JavaScript owns portable decisions and state transitions; QML components own Qt lifecycle and input mechanics; feature views supply OmamailAI composition; semantic properties supplied from `App.qml` carry the Omarchy presentation. This is the `gpui-base` and `gpui-component` seam expressed through the units this repository already has.
 
 Provider differences end at the provider boundary. Code above that boundary asks about capabilities and consumes the common message resource. It does not branch on provider IDs.
 
 ## Vocabulary is an interface contract
 
-Follow the Coding Guides' vocabulary and API naming rules. Omamail keeps one canonical name for each mail object, command, and state across QML properties, signals, actions, sidebar rows, settings, menus, tooltips, notices, shortcuts, errors, and documentation. The project-specific distinction between `cursorId` and `selectedId` is load-bearing: the former is the keyboard position and the latter is the message shown by the reader.
+Follow the Coding Guides' vocabulary and API naming rules. OmamailAI keeps one canonical name for each mail object, command, and state across QML properties, signals, actions, sidebar rows, settings, menus, tooltips, notices, shortcuts, errors, and documentation. The project-specific distinction between `cursorId` and `selectedId` is load-bearing: the former is the keyboard position and the latter is the message shown by the reader.
 
 Review terminology in the rendered surface beside neighboring labels, not as an isolated string. When a canonical term changes, search every interface surface and document that may use it.
 
@@ -169,11 +169,11 @@ Resizable panes use the same conceptual split as GPUI Component:
 - double activation may restore the computed default;
 - persistence records a user-selected size, not a transient clamped size from a smaller window.
 
-Omamail currently has one hand-built list/reader splitter. It is a valid specialization, but future split layouts should share the state and constraint rules rather than copy the drag handler.
+OmamailAI currently has one hand-built list/reader splitter. It is a valid specialization, but future split layouts should share the state and constraint rules rather than copy the drag handler.
 
 Layout state describes semantic regions and their allocation independently of the QML objects that render them. When a region is hidden, the remaining visible regions consume the released space; an invisible pane must not leave behind a slot. Restoring it reapplies its preferred allocation subject to the current bounds.
 
-This does not justify a general dock tree. Omamail has one known navigation/collection/content arrangement and three responsive modes. A tree with tab groups, arbitrary nesting, drag-to-dock, registries, or layout normalization would model operations the product does not offer. Extract the invariant—visible panes fill the available layout—not the machinery built for an IDE workspace.
+This does not justify a general dock tree. OmamailAI has one known navigation/collection/content arrangement and three responsive modes. A tree with tab groups, arbitrary nesting, drag-to-dock, registries, or layout normalization would model operations the product does not offer. Extract the invariant—visible panes fill the available layout—not the machinery built for an IDE workspace.
 
 ## Measurement and scrolling
 
@@ -224,17 +224,17 @@ These are directions, not a requirement for an immediate rewrite.
 
 ## Translation boundary
 
-Architecture and interaction principles transfer by default; runtime machinery transfers only through an equivalent Omamail need. Translate `Entity` ownership into the appropriate service, feature view, or component property owner; translate semantic events into signals; translate controlled values into property input plus requested-change output; translate keyed identity into stable domain IDs; translate render-phase measurement into the Qt lifecycle point where resolved geometry actually exists.
+Architecture and interaction principles transfer by default; runtime machinery transfers only through an equivalent OmamailAI need. Translate `Entity` ownership into the appropriate service, feature view, or component property owner; translate semantic events into signals; translate controlled values into property input plus requested-change output; translate keyed identity into stable domain IDs; translate render-phase measurement into the Qt lifecycle point where resolved geometry actually exists.
 
 Do not create Rust-shaped QML APIs or shadow facilities already owned by Qt. GPUI-specific contexts, handles, and render/prepaint/paint phases explain the lifecycle problem but are not types this project needs to imitate. Qt popup key capture, focus scope behavior, object lifetime, and QML binding semantics remain authoritative for the implementation.
 
-The same distinction applies to large feature systems. Dock's pure-data layout, canonical state, stable identity, and fill-after-removal invariants apply; a Dock tree, panel registry, arbitrary tab groups, tiles, and drag-to-dock editing do not exist until Omamail offers those product operations. Virtualization's separation of model coordinates, visible range, measurement, and row rendering applies; virtual-list machinery is introduced only when the loaded-message model needs it.
+The same distinction applies to large feature systems. Dock's pure-data layout, canonical state, stable identity, and fill-after-removal invariants apply; a Dock tree, panel registry, arbitrary tab groups, tiles, and drag-to-dock editing do not exist until OmamailAI offers those product operations. Virtualization's separation of model coordinates, visible range, measurement, and row rendering applies; virtual-list machinery is introduced only when the loaded-message model needs it.
 
 The visual exception is explicit. GPUI Component theme tokens, dimensions, cursor styling, animation curves, shadows, radii, and surface appearance do not transfer. Omarchy remains the visual authority.
 
 ## Commit design
 
-Commits should preserve the reasoning that makes an architectural choice safe to change later. The best history in both Omamail and GPUI Component follows a consistent structure.
+Commits should preserve the reasoning that makes an architectural choice safe to change later. The best history in both OmamailAI and GPUI Component follows a consistent structure.
 
 ### Subject
 

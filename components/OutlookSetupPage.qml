@@ -97,7 +97,7 @@ Column {
     width: parent.width
     providerId: "outlook"
     title: "Add an Outlook mailbox"
-    detail: "Outlook.com and Hotmail use Microsoft sign-in. Omamail never sees your password."
+    detail: "Outlook.com and Hotmail use Microsoft sign-in. OmamailAI never sees your password."
     textColor: root.textColor
     dimColor: root.dimColor
     panelFontFamily: root.panelFontFamily
@@ -210,7 +210,7 @@ Column {
 
     Text {
       width: parent.width
-      text: "1. Register an app for personal Microsoft accounts. 2. Under Authentication, enable public client flows. 3. Copy its Application (client) ID above. Omamail requests only IMAP, SMTP and offline access when you sign in."
+      text: "1. Register an app for personal Microsoft accounts. 2. Under Authentication, enable public client flows. 3. Copy its Application (client) ID above. OmamailAI requests only IMAP, SMTP and offline access when you sign in."
       color: root.dimColor
       font.family: root.panelFontFamily
       font.pixelSize: Style.font.caption

@@ -8,7 +8,7 @@ import "../../account" as Account
 Item {
   QtObject {
     id: auth
-    property string pluginDir: "/tmp/omamail-review113-cache"
+    property string pluginDir: "/tmp/omamailai-review113-cache"
     property var settings: ({
         imapHost: "imap.example.com",
         imapPort: 993,

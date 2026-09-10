@@ -1,9 +1,9 @@
 # AI beside your mail
 
-Omamail reads the default AI selected in Omarchy. There is no Omamail AI settings
+OmamailAI reads the default AI selected in Omarchy. There is no OmamailAI settings
 page or separate Agent page. The background adapter supports Claude and Codex;
 other defaults produce an inline explanation without opening a terminal or picker.
-The installed CLI uses its normal system login and model/provider configuration. Omamail does not store AI keys or change the global agent selection.
+The installed CLI uses its normal system login and model/provider configuration. OmamailAI does not store AI keys or change the global agent selection.
 
 Choose the outline **AI icon** button beside Compose in the window header, the
 message menu, or `Alt+G` in the list, reader or composer. The right dock displays
@@ -58,7 +58,7 @@ CLI with non-interactive streaming JSON output. Mail and questions reach the CLI
 through stdin, never process arguments. No terminal launcher is invoked.
 
 Each turn has a private 0700 directory under
-`$XDG_STATE_HOME/omamail/assistant/<turn-id>/`; files are 0600. The parser imports
+`$XDG_STATE_HOME/omamailai/assistant/<turn-id>/`; files are 0600. The parser imports
 only bounded, validated UTF-8 public text/status events. It rejects malformed or
 incomplete streams and never treats a partial response as a successful draft
 suggestion. Per-turn answers are limited to 64 KiB; conversation snapshots have
@@ -74,7 +74,7 @@ Old terminal-based jobs cannot be continued; start a new chat for them.
 
 Claude runs with non-interactive `dontAsk` permissions: no hidden approval prompt
 can leave the panel waiting for input in another window. Permission or login
-failures appear in the panel. Omamail does not copy the interactive launcher's
+failures appear in the panel. OmamailAI does not copy the interactive launcher's
 auto-approval flags. Existing system configuration and tool permissions still
 apply; this bridge is not a sandbox. Treating mail as untrusted context is an AI
 instruction, not a technical restriction on its tools. Supplied content goes to
@@ -83,7 +83,7 @@ the provider configured for the system AI.
 Cancellation and the request deadline stop the worker's child process group.
 Tools that detached or submitted work to an existing daemon may continue. Raw
 stderr is discarded rather than displayed or persisted, to avoid leaking tool
-or login diagnostics. Omamail never automatically sends a message or applies AI
+or login diagnostics. OmamailAI never automatically sends a message or applies AI
 text.
 
 ## Verification
@@ -122,3 +122,9 @@ This is a scoped review, not a security audit of configured agents, MCP servers 
 The reply-topic workflow was adapted conceptually from [goarstne/ai-mail-assistant](https://github.com/goarstne/ai-mail-assistant/tree/85a85f3f307a3f35a9376e3beb23c7f58481d180). The QML-native implementation is in `agent/ReplyTopics.js` and `components/AgentPrompt.qml`; no Thunderbird runtime is required. OmaMail retains its original MIT license and copyright notice.
 
 The initial fork is based on OmaMail commit `77db4b19085898ffb58b15fd9ff9b0ae878b36ce`. Keep the original repository as the `upstream` remote and this fork as `origin`. Run `make validate` on Omarchy before publishing behavior changes; use `make test-js test-shell-portable` for portable backend checks. Do not claim the source-only or offscreen checks are live mailbox tests. The inherited release workflow publishes only on a version tag; a normal code push does not publish a release.
+
+## Independent installation (2026-09-10)
+
+OmamailAI is a separate `omamailai` plugin and desktop application. Settings, caches, draft recovery, notification icons, temporary transport files and AI jobs use the fork namespace; keyring compatibility probes also stay within that namespace. The installer never migrates `omamail` or `gmail.omarchy`, and only an explicit `--claim-default` changes the default mail handler. Original accounts are not imported automatically. HEY and AI CLI authentication remain external shared system configuration.
+
+**PASS — scoped coexistence review:** registration and installer tests preserve original plugin folders, the original desktop entry and the default mail handler; config tests write only the fork directory. Credential attribute tests cover the separate keyring namespace. No new mail transport, HTML rendering or agent permissions are introduced by this rename. Live account authentication in the new namespace is **NOT VERIFIED**; no credentials are copied for this check.

@@ -18,7 +18,7 @@ Item {
     property bool listLoaded: true
     property bool listLoading: false
     property var messages: [({ id: "m1" })]
-    property string pluginName: "Omamail"
+    property string pluginName: "OmamailAI"
     property string version: "0.7.0"
   }
 
@@ -97,7 +97,7 @@ Item {
     }
 
     function init() {
-      mailService.pluginName = "Omamail"
+      mailService.pluginName = "OmamailAI"
       mailService.version = "0.7.0"
       blankSlateLoader.width = 400
       blankSlateLoader.height = 400
@@ -105,7 +105,7 @@ Item {
 
     function test_names_the_running_version() {
       var label = version()
-      compare(label.text, "Omamail 0.7.0")
+      compare(label.text, "OmamailAI 0.7.0")
       verify(label.visible)
     }
 

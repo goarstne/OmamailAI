@@ -1,23 +1,23 @@
-# Omamail AI
+# OmamailAI
 
 **Native Omarchy mail with AI reply topics using your configured system agent.**
 
-This is [goarstne’s fork](https://github.com/goarstne/omamail) of [huacnlee/omamail](https://github.com/huacnlee/omamail), based on upstream 0.8.2. It adds Codex background conversations and contextual reply topics inspired by [AI Mail Assistant](https://github.com/goarstne/ai-mail-assistant). Existing Claude support is retained. There are no separate AI API keys or model settings in this fork.
+This is [goarstne’s fork](https://github.com/goarstne/OmamailAI) of [huacnlee/omamail](https://github.com/huacnlee/omamail), based on upstream 0.8.2. It adds Codex background conversations and contextual reply topics inspired by [AI Mail Assistant](https://github.com/goarstne/ai-mail-assistant). Existing Claude support is retained. There are no separate AI API keys or model settings in this fork.
 
 Open a message, press **Alt+G**, choose **Reply topics**, and select a direction. Review the generated answer, then choose **Use as reply...** to create a normal reply draft with your signature and quoted message preserved. Nothing is sent automatically. Codex and Claude use their existing login and model configuration; Kimi, Antigravity and Ori currently report an unsupported-adapter message. See [AI assistance](docs/AGENT.md) for behavior, compatibility, privacy and verification.
 
-Omamail is an Omarchy desktop email client: a Quickshell plugin that reads, triages, and answers your mail over the official Gmail API, through Microsoft OAuth for Outlook, over the HEY CLI client 37signals publish, over JMAP, or over IMAP and SMTP for every other mailbox. It runs inside the `omarchy-shell` process you already have, follows your active theme, and puts an unread count in the bar.
+OmamailAI is an Omarchy desktop email client: a Quickshell plugin that reads, triages, and answers your mail over the official Gmail API, through Microsoft OAuth for Outlook, over the HEY CLI client 37signals publish, over JMAP, or over IMAP and SMTP for every other mailbox. It runs inside the `omarchy-shell` process you already have, follows your active theme, and puts an unread count in the bar.
 
 
-<img width="800" alt="Omamail - Reading mail with AI assistance for selected messages" src="docs/images/full-mail.webp" />
+<img width="800" alt="OmamailAI - Reading mail with AI assistance for selected messages" src="docs/images/full-mail.webp" />
 
 The calendar, a new message, and the question every new mailbox starts with:
 
-<img width="265" alt="Omamail - The calendar in month view" src="docs/images/full-calendar.webp" /> <img width="265" alt="Omamail - Writing a new message" src="docs/images/full-compose.webp" /> <img width="265" alt="Omamail - Adding a mailbox: Gmail, HEY or IMAP" src="docs/images/full-add-mailbox.webp" />
+<img width="265" alt="OmamailAI - The calendar in month view" src="docs/images/full-calendar.webp" /> <img width="265" alt="OmamailAI - Writing a new message" src="docs/images/full-compose.webp" /> <img width="265" alt="OmamailAI - Adding a mailbox: Gmail, HEY or IMAP" src="docs/images/full-add-mailbox.webp" />
 
 And with mini size mode:
 
-<img width="265" alt="Omamail - Mini size: the message list" src="docs/images/mini-list.webp" /> <img width="265" alt="Omamail - Mini size: one message open" src="docs/images/mini-message.webp" /> <img width="265" alt="Omamail - Mini size: writing a new message" src="docs/images/mini-compose.webp" />
+<img width="265" alt="OmamailAI - Mini size: the message list" src="docs/images/mini-list.webp" /> <img width="265" alt="OmamailAI - Mini size: one message open" src="docs/images/mini-message.webp" /> <img width="265" alt="OmamailAI - Mini size: writing a new message" src="docs/images/mini-compose.webp" />
 
 Works with **Gmail**, **HEY**, **Fastmail**, **iCloud Mail**, **Outlook**, **Yahoo**, **Zoho**, **GMX**, **Proton Mail** (through its Bridge), and any server that speaks **JMAP** or **IMAP** — including one you run yourself.
 
@@ -68,7 +68,7 @@ Works with **Gmail**, **HEY**, **Fastmail**, **iCloud Mail**, **Outlook**, **Yah
   every message read that way instead. The interface itself is unaffected.
 - **Your theme.** Every colour comes from the active Omarchy theme, so the
   mailbox changes the moment the desktop does.
-- **Keyring-backed.** Gmail and Outlook refresh tokens and every JMAP and IMAP password live in GNOME Keyring — never in a config file, never on a command line. A HEY mailbox has no credential here at all: the HEY CLI holds its own token, and Omamail only ever asks it whether it is signed in.
+- **Keyring-backed.** Gmail and Outlook refresh tokens and every JMAP and IMAP password live in GNOME Keyring — never in a config file, never on a command line. A HEY mailbox has no credential here at all: the HEY CLI holds its own token, and OmamailAI only ever asks it whether it is signed in.
 
 ## What it is
 
@@ -85,25 +85,35 @@ Three parts, one plugin:
 ## Add it to Omarchy
 
 ```bash
-omarchy plugin add https://github.com/goarstne/omamail.git --enable
+omarchy plugin add https://github.com/goarstne/OmamailAI.git --enable
 ```
 
-The fork keeps the plugin ID `omamail` and existing account/storage paths. It replaces upstream OmaMail rather than running alongside it. Back up your current plugin folder outside `~/.config/omarchy/plugins` before switching. Removing the plugin does not require deleting your account configuration or keyring entries.
+OmamailAI uses the independent plugin ID `omamailai` and can run alongside upstream OmaMail (`omamail`). Open **OmamailAI** from the Omarchy app menu, or click its envelope in the bar. The app-menu entry is registered when the service starts. To register it manually:
+
+```bash
+sh ~/.config/omarchy/plugins/omamailai/scripts/register-mailto.sh ~/.config/omarchy/plugins/omamailai
+```
+
+For a local development checkout, run `make install` (or `bash scripts/link-plugin.sh --no-restart` to rescan without restarting the shell). The installer links only `omamailai`; it does not replace or migrate an original OmaMail installation.
+
+Accounts, compose recovery and calendars use `$XDG_CONFIG_HOME/omamailai` (default `~/.config/omamailai`); cache uses `$XDG_CACHE_HOME/omamailai`; AI jobs use `$XDG_STATE_HOME/omamailai/assistant`. Keyring entries use service `omamailai`. Set up mail accounts separately: no original account data or secrets are copied or deleted. Gmail's default loopback OAuth port is 9482, separate from upstream's 9481. The external HEY CLI login and configured AI CLI logins remain shared system configuration.
 
 Then click the envelope in the bar. To open it from the keyboard, add this to
 `~/.config/hypr/bindings.lua`:
 
 ```lua
-  o.bind("SUPER + SHIFT + G", "Omamail", "omarchy shell shell toggle omamail '{}'")
+  o.bind("SUPER + SHIFT + G", "OmamailAI", "omarchy shell shell toggle omamailai '{}'")
 ```
 
 The target is `shell`, not the plugin id: the window is summoned by the shell,
 which is what loads it in the first place. A plugin-scoped target would have to
 be registered by code that is only running once the window is already open.
 
-Once the plugin is enabled, Omamail handles `mailto:` links. Clicking an
-address in a browser, a PDF, or a notification opens compose here.
-`xdg-open mailto:you@example.com` is the check.
+Installing OmamailAI preserves your default mail client. To explicitly make it handle `mailto:` links, run:
+
+```bash
+sh ~/.config/omarchy/plugins/omamailai/scripts/register-mailto.sh ~/.config/omarchy/plugins/omamailai --claim-default
+```
 
 Requires Omarchy 4, plus `socat`, `secret-tool`, `openssl`, `xdg-open`, `python3` and
 `curl`. Python handles remote images, one-click unsubscribe and attachments; curl handles IMAP, SMTP and CalDAV. A HEY mailbox additionally needs
@@ -118,14 +128,14 @@ project, so this route needs an OAuth client you create once — the setup page
 walks through it. In exchange it gets labels, conversations, Gmail's own search
 syntax, and a "report spam" that Google actually learns from.
 
-**Outlook** signs in on Microsoft's own page and uses [Microsoft's supported OAuth route for IMAP and SMTP][microsoft-mail-oauth]. It works with Outlook.com, Hotmail, Live and MSN accounts; Omamail never asks for the Microsoft account password. Until Omamail ships a maintainer-owned public client, the setup page asks for an Application (client) ID from a one-time Microsoft Entra app registration. Make it a public client for personal Microsoft accounts; the sign-in asks for `IMAP.AccessAsUser.All`, `SMTP.Send` and `offline_access` and shows the device code to enter in the Microsoft page it opens.
+**Outlook** signs in on Microsoft's own page and uses [Microsoft's supported OAuth route for IMAP and SMTP][microsoft-mail-oauth]. It works with Outlook.com, Hotmail, Live and MSN accounts; OmamailAI never asks for the Microsoft account password. Until OmamailAI ships a maintainer-owned public client, the setup page asks for an Application (client) ID from a one-time Microsoft Entra app registration. Make it a public client for personal Microsoft accounts; the sign-in asks for `IMAP.AccessAsUser.All`, `SMTP.Send` and `offline_access` and shows the device code to enter in the Microsoft page it opens.
 
 Before signing in, enable IMAP in Outlook.com: **Settings > Mail > Forwarding and IMAP > Let devices and apps use IMAP**, then save. Microsoft disables IMAP by default; OAuth consent alone does not enable mailbox access. See [Microsoft's IMAP setup instructions](https://support.microsoft.com/en-us/outlook/pop-imap-and-smtp-settings-for-outlook-com).
 
 **HEY** needs no address and no password. HEY publishes no IMAP, no POP and no
-public API, so Omamail reads it through the [HEY CLI][hey-cli] client 37signals
+public API, so OmamailAI reads it through the [HEY CLI][hey-cli] client 37signals
 ship for exactly this — which means the sign-in, the token and the keyring entry
-it lives in are all `hey`'s, and Omamail never asks for your HEY password.
+it lives in are all `hey`'s, and OmamailAI never asks for your HEY password.
 
 Install it once:
 
@@ -135,7 +145,7 @@ omarchy-mise-install github:basecamp/hey-cli hey
 
 Recent versions of Omarchy install it for you as a lazy mise tool, so that line
 is only for doing it by hand; [37signals' own installer][hey-cli] is the other
-route. Either way it lands in `~/.local/bin`, which is where Omamail looks when
+route. Either way it lands in `~/.local/bin`, which is where OmamailAI looks when
 it is not already on `PATH`. Then choose **HEY** on the setup page and press
 **Sign in to HEY** — that opens HEY in your browser, and nothing else is asked
 of you.
@@ -155,7 +165,7 @@ on all work.
 Three more differences worth knowing. A HEY row is a *conversation*, not a
 single message. Message bodies read as `hey` serves them — as the sender's own
 HTML where your `hey` is new enough to hand it over, and as text elsewhere;
-Omamail asks for the richer one every time and takes whichever comes back, so
+OmamailAI asks for the richer one every time and takes whichever comes back, so
 upgrading `hey` improves it with nothing to change here. And the meeting card,
 the one-click unsubscribe, attachments and the Screener are all read out of
 parts of a message that `hey` does not serve, or out of an endpoint it does not
@@ -177,23 +187,23 @@ could not keep. Archive appears only when the server has an archive folder to
 move to. Sending goes out over SMTP, or the mailbox is read-only if no SMTP
 server is set.
 
-The sent copy is filed by Omamail rather than left to the server: a message handed to SMTP submission lands nowhere on its own. It goes to the server's own Sent folder, named by the server rather than guessed, and arrives already marked read; a server that reports no Sent folder holds no copy, and the status row says so. One thing worth knowing: a Gmail account read over IMAP has Google file its own copy of anything sent through Gmail's SMTP, so those accounts hold two.
+The sent copy is filed by OmamailAI rather than left to the server: a message handed to SMTP submission lands nowhere on its own. It goes to the server's own Sent folder, named by the server rather than guessed, and arrives already marked read; a server that reports no Sent folder holds no copy, and the status row says so. One thing worth knowing: a Gmail account read over IMAP has Google file its own copy of anything sent through Gmail's SMTP, so those accounts hold two.
 
 To remove it:
 
 ```bash
-omarchy plugin remove omamail
+omarchy plugin remove omamailai
 ```
 
 That takes the plugin itself. Nothing it wrote lives inside your Omarchy
 config, so removing those is separate and entirely up to you:
 
 ```bash
-secret-tool clear service omamail    # refresh tokens and JMAP and IMAP passwords
+secret-tool clear service omamailai    # refresh tokens and JMAP and IMAP passwords
 hey auth logout                      # the HEY session, if you added one
-rm -rf ~/.config/omamail             # the OAuth client and account list
-rm -rf ~/.cache/omamail              # cached mail
-rm ~/.local/share/applications/omamail.desktop
+rm -rf ~/.config/omamailai             # the OAuth client and account list
+rm -rf ~/.cache/omamailai              # cached mail
+rm ~/.local/share/applications/omamailai.desktop
 ```
 
 Signing out from inside the app clears the keyring entry on its own. The plugin
@@ -203,7 +213,7 @@ and the mailto desktop file are yours to add and yours to remove.
 ## Connecting your mailbox
 
 Gmail has no shared application to sign in through. Google issues API access
-per Cloud project, so Omamail signs in with an OAuth client **you own**.
+per Cloud project, so OmamailAI signs in with an OAuth client **you own**.
 The window walks you through it in five steps, each with the console page one
 click away. It takes about two minutes, once.
 
@@ -257,13 +267,13 @@ To act on several messages, hold Ctrl to replace the row actions with checkboxes
 
 Search paints matching cached rows first and adds server results as they arrive. It takes Gmail's own operator syntax straight through — `from:jane`, `has:attachment`, `older_than:7d`. The Unread mailbox leaves Promotions, Social and Forums out rather than asking for Primary: Gmail's categories do not remove the `INBOX` label, so an unread filter without that exclusion comes back as the whole promotional backlog rather than the mail you have not read — while one that asks for Primary comes back empty on any account where Gmail is not applying the category labels, which is unread mail with nothing left to say so. Updates stays in, because receipts, deliveries and notifications land there. Right-click any row in the list for archive, trash, spam, star and read/unread without leaving the keyboard cursor behind.
 
-AI assistance uses the default AI selected in Omarchy, with no separate Omamail AI settings. Use the outline **AI icon** button beside Compose, the message menu, or `Alt+G`. Type a multiline question or use `/` for common commands, then Enter to send or Shift+Enter for a new line. The **…** menu opens new chats and conversation history. Results return to the right dock; draft suggestions can be inserted or replace the body after review. The panel streams the conversation and supports follow-up questions without opening a terminal. The background adapter supports Claude and Codex, using the existing Omarchy selection and CLI login. For a single message, **Reply topics** offers contextual directions; select one, review the generated text, and use **Use as reply...** to open a reply draft. See [AI assistance](docs/AGENT.md).
+AI assistance uses the default AI selected in Omarchy, with no separate OmamailAI settings. Use the outline **AI icon** button beside Compose, the message menu, or `Alt+G`. Type a multiline question or use `/` for common commands, then Enter to send or Shift+Enter for a new line. The **…** menu opens new chats and conversation history. Results return to the right dock; draft suggestions can be inserted or replace the body after review. The panel streams the conversation and supports follow-up questions without opening a terminal. The background adapter supports Claude and Codex, using the existing Omarchy selection and CLI login. For a single message, **Reply topics** offers contextual directions; select one, review the generated text, and use **Use as reply...** to open a reply draft. See [AI assistance](docs/AGENT.md).
 
 A signature is set per mailbox on the settings page, under Writing. It is placed under a new message and above the quoted text in a reply, so a sign-off stays next to the words it signs rather than stranded below a screen of somebody else's message. It is sent exactly as typed — no `-- ` line is added in front of it, because a client that adds one turns a signature into two decisions, and the line is one keystroke away for anybody who wants it. Each mailbox keeps its own: two addresses are two identities, and one sign-off under both is wrong for whichever it was not written for. A saved draft is reopened as it was written, so resuming one never signs it twice.
 
 ## What it does not do
 
-- **No embedded browser.** A message opens in a reading view Omamail builds
+- **No embedded browser.** A message opens in a reading view OmamailAI builds
   itself: headings, paragraphs, lists and links in your own type at a readable
   measure, with none of the sender's presentation in it. The sender's own
   layout is one click away, and that one renders through Qt's own rich text
@@ -297,7 +307,7 @@ thousand of them, evicted least-recently-used.
 ## Where your credentials live
 
 - **A HEY mailbox has no credential here at all.** `hey` performs the OAuth
-  flow, keeps the token in your keyring and refreshes it; Omamail only ever
+  flow, keeps the token in your keyring and refreshes it; OmamailAI only ever
   asks it whether it is signed in. Signing out from the setup page runs
   `hey auth logout`, which signs that client out for everything on the machine
   that uses it.
@@ -307,7 +317,7 @@ thousand of them, evicted least-recently-used.
   overwrite the first.
 - The Outlook refresh token goes to **GNOME Keyring** under its own provider, client and account keys. The Microsoft Application (client) ID is public configuration and stays with the account entry.
 - A JMAP or IMAP password goes to the same keyring, keyed by the account, and over stdin for the same reason. A JMAP credential is only ever sent to the server that answered the session request and to the addresses inside that session object.
-- The OAuth client goes to `~/.config/omamail/credentials.json`, mode
+- The OAuth client goes to `~/.config/omamailai/credentials.json`, mode
   `0600`. Not to plugin settings — `shell.json` is world-readable.
 - The access token exists only in memory.
 - Signing out clears the keyring entry.
@@ -328,7 +338,7 @@ How to send a change — there is no issue tracker — is in
 [CONTRIBUTING.md](CONTRIBUTING.md). Working agreements are in
 [AGENTS.md](AGENTS.md) and the specification is in [docs/SPEC.md](docs/SPEC.md).
 
-Omamail is an independent project and is not affiliated with Google, Microsoft or 37signals. Gmail is a trademark of Google LLC; Outlook is a trademark of Microsoft Corporation; HEY is a trademark of 37signals, LLC.
+OmamailAI is an independent project and is not affiliated with Google, Microsoft or 37signals. Gmail is a trademark of Google LLC; Outlook is a trademark of Microsoft Corporation; HEY is a trademark of 37signals, LLC.
 
 Licensed under the [MIT License](LICENSE).
 

@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../../components" as Omamail
+import "../../components" as OmamailAI
 
 // Whose identity a draft writes with, when the mailbox it belongs to is not
 // the mailbox on screen.
@@ -82,7 +82,7 @@ Item {
     function setAccountSignature(_id, _text) {}
   }
 
-  Omamail.ComposeView {
+  OmamailAI.ComposeView {
     id: compose
     anchors.fill: parent
     service: mailService

@@ -1059,7 +1059,7 @@ Item {
         function(filed, appendError) {
         if (!root) return
         if (appendError)
-          console.warn("omamail: the sent copy could not be filed:", appendError)
+          console.warn("omamailai: the sent copy could not be filed:", appendError)
         callback(Imap.sentCopyResult(folder, !appendError), "")
       }, handle)
     })

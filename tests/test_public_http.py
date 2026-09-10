@@ -204,7 +204,7 @@ with transport.deadline(0.05):
 
 class LocalTLS(unittest.TestCase):
     def test_tls_verification_post_and_redirect(self):
-        with tempfile.TemporaryDirectory(prefix="omamail-tls-test-") as directory:
+        with tempfile.TemporaryDirectory(prefix="omamailai-tls-test-") as directory:
             cert, key = Path(directory) / "cert.pem", Path(directory) / "key.pem"
             subprocess.run(["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes",
                             "-keyout", str(key), "-out", str(cert), "-days", "1",

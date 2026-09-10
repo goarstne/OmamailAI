@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 import "../../account/Unified.js" as Unified
 
 // The service routing a merged list, against a real `Service` with real
@@ -28,10 +28,10 @@ Item {
     function hide(_id) {}
   }
 
-  Omamail.Service {
+  OmamailAI.Service {
     id: service
     shell: fakeShell
-    manifest: ({ id: "omamail", __sourceDir: "/tmp/omamail-unified-test" })
+    manifest: ({ id: "omamailai", __sourceDir: "/tmp/omamailai-unified-test" })
   }
 
   TestCase {

@@ -172,9 +172,9 @@ work=""
 if [ "$verb" != "stream" ]; then
   umask 077
   base=${TMPDIR:-${XDG_RUNTIME_DIR:-/tmp}}
-  find "$base" -maxdepth 1 -type d -name 'omamail-jmap.*' -user "$(id -un)" \
+  find "$base" -maxdepth 1 -type d -name 'omamailai-jmap.*' -user "$(id -un)" \
     -mmin +60 -exec rm -rf {} + 2>/dev/null || true
-  work=$(mktemp -d "$base/omamail-jmap.XXXXXX") \
+  work=$(mktemp -d "$base/omamailai-jmap.XXXXXX") \
     || fail 'jmap-transport.sh: no temporary directory'
   trap 'rm -rf "$work"' EXIT INT TERM HUP
 fi

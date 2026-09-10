@@ -20,7 +20,7 @@ usage() {
   cat <<'USAGE'
 Usage: google-cloud-project.sh [--project ID] [--no-open]
 
-  --project ID   Cloud project to create or reuse. Default: omamail-<random>
+  --project ID   Cloud project to create or reuse. Default: omamailai-<random>
   --no-open      Print the console URLs instead of opening them.
 
 Needs the gcloud CLI (AUR: google-cloud-cli) and a signed-in account.
@@ -52,14 +52,14 @@ fi
 # `tr` dies of SIGPIPE, and under `pipefail` the whole script exits 141 without
 # printing anything.
 if [[ -z $project_id ]]; then
-  project_id="omamail-$(od -An -tx1 -N3 /dev/urandom | tr -d ' \n')"
+  project_id="omamailai-$(od -An -tx1 -N3 /dev/urandom | tr -d ' \n')"
 fi
 
 if gcloud projects describe "$project_id" >/dev/null 2>&1; then
   printf 'Reusing existing project %s\n' "$project_id"
 else
   printf 'Creating project %s…\n' "$project_id"
-  gcloud projects create "$project_id" --name="Omamail"
+  gcloud projects create "$project_id" --name="OmamailAI"
 fi
 
 printf 'Enabling the Gmail and Google Calendar APIs…\n'
@@ -81,7 +81,7 @@ Done with the part gcloud can do. Two steps are left, and both are console-only:
      $consent_url
 
   2. Create an OAuth client, application type "Desktop app", then paste its
-     client ID into Omamail.
+     client ID into OmamailAI.
 
      $clients_url
 

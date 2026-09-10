@@ -139,7 +139,7 @@ function load(text) {
 function keyringAttributes(sourceId) {
   var id = trimmed(sourceId)
   if (id === "") return []
-  return ["service", "omamail", "kind", "calendar-password", "source", id]
+  return ["service", "omamailai", "kind", "calendar-password", "source", id]
 }
 
 function withGoogleAccounts(list, accountSummaries) {

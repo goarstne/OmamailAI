@@ -13,7 +13,7 @@ def encoded(value):
     return base64.b64encode(value).decode()
 
 
-with tempfile.TemporaryDirectory(prefix="omamail-config-test-") as directory:
+with tempfile.TemporaryDirectory(prefix="omamailai-config-test-") as directory:
     work = Path(directory)
     marker = work / "called"
     arguments = work / "arguments"

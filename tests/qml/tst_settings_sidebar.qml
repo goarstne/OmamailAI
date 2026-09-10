@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtTest 1.3
-import "../.." as Omamail
+import "../.." as OmamailAI
 
 // Where the window is, is a history. Every page is an entry on it, every Back
 // — the bar on a page, Escape, a draft closing — pops one, and the root is
@@ -189,7 +189,7 @@ Item {
     function note(text) { actionStatus = String(text || "") }
   }
 
-  Omamail.App {
+  OmamailAI.App {
     id: app
     service: mailService
     shell: fakeShell
@@ -220,7 +220,7 @@ Item {
     // The window `App` measures itself by is the one it draws, not the test
     // root: find it by its title to size it.
     function window() {
-      return having(app, function(it) { return it.title === "Omamail" })
+      return having(app, function(it) { return it.title === "OmamailAI" })
     }
 
     function having(item, accept) {

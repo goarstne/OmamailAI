@@ -15,7 +15,7 @@ Item {
   property bool loaded: false
   readonly property string cacheHome: Quickshell.env("XDG_CACHE_HOME")
     || (Quickshell.env("HOME") + "/.cache")
-  readonly property string directory: cacheHome + "/omamail"
+  readonly property string directory: cacheHome + "/omamailai"
   readonly property string path: directory + "/" + cacheName + ".json"
 
   signal restored()
