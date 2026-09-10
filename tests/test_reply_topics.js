@@ -1,0 +1,16 @@
+const assert = require('node:assert/strict')
+const {load, deepEqual} = require('./load')
+const T = load('agent/ReplyTopics.js')
+const topic = {title:'Zusagen', description:'Den Termin bestätigen.', instruction:'Sage den Termin zu.'}
+deepEqual(T.parse(JSON.stringify([topic])), [topic])
+deepEqual(T.parse('```json\n' + JSON.stringify([topic]) + '\n```'), [topic])
+deepEqual(T.parse(JSON.stringify([{titel:topic.title,beschreibung:topic.description,anweisung:topic.instruction}])), [topic])
+for (const value of ['{}', 'null', '[null]', '[{"title":"a"}]', 'broken', JSON.stringify(Array(5).fill(topic)), JSON.stringify([{...topic,title:'x'.repeat(61)}])]) deepEqual(T.parse(value), [])
+assert.equal(T.isReply([{role:'user',text:T.replyPrompt(topic)}]), true)
+assert.equal(T.isReply([{role:'assistant',text:T.REPLY_PREFIX}]), false)
+const job = {state:'done',resultReady:true,accountId:'a',messageId:'1',messageIds:['1']}
+assert.equal(T.canUseReply(job,'a','1',false),true)
+for (const args of [['b','1',false],['a','2',false],['a','1',true]]) assert.equal(T.canUseReply(job,...args),false)
+assert.equal(T.canUseReply({...job,state:'running'},'a','1',false),false)
+assert.equal(T.canUseReply({...job,resultReady:false},'a','1',false),false)
+console.log('reply topics ok')

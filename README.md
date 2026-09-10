@@ -1,6 +1,10 @@
-# Omamail
+# Omamail AI
 
-**Your mail as a native Omarchy window — not a browser tab.**
+**Native Omarchy mail with AI reply topics using your configured system agent.**
+
+This is [goarstne’s fork](https://github.com/goarstne/omamail) of [huacnlee/omamail](https://github.com/huacnlee/omamail), based on upstream 0.8.2. It adds Codex background conversations and contextual reply topics inspired by [AI Mail Assistant](https://github.com/goarstne/ai-mail-assistant). Existing Claude support is retained. There are no separate AI API keys or model settings in this fork.
+
+Open a message, press **Alt+G**, choose **Reply topics**, and select a direction. Review the generated answer, then choose **Use as reply...** to create a normal reply draft with your signature and quoted message preserved. Nothing is sent automatically. Codex and Claude use their existing login and model configuration; Kimi, Antigravity and Ori currently report an unsupported-adapter message. See [AI assistance](docs/AGENT.md) for behavior, compatibility, privacy and verification.
 
 Omamail is an Omarchy desktop email client: a Quickshell plugin that reads, triages, and answers your mail over the official Gmail API, through Microsoft OAuth for Outlook, over the HEY CLI client 37signals publish, over JMAP, or over IMAP and SMTP for every other mailbox. It runs inside the `omarchy-shell` process you already have, follows your active theme, and puts an unread count in the bar.
 
@@ -81,8 +85,10 @@ Three parts, one plugin:
 ## Add it to Omarchy
 
 ```bash
-omarchy plugin add https://github.com/huacnlee/omamail.git --enable
+omarchy plugin add https://github.com/goarstne/omamail.git --enable
 ```
+
+The fork keeps the plugin ID `omamail` and existing account/storage paths. It replaces upstream OmaMail rather than running alongside it. Back up your current plugin folder outside `~/.config/omarchy/plugins` before switching. Removing the plugin does not require deleting your account configuration or keyring entries.
 
 Then click the envelope in the bar. To open it from the keyboard, add this to
 `~/.config/hypr/bindings.lua`:
@@ -251,7 +257,7 @@ To act on several messages, hold Ctrl to replace the row actions with checkboxes
 
 Search paints matching cached rows first and adds server results as they arrive. It takes Gmail's own operator syntax straight through — `from:jane`, `has:attachment`, `older_than:7d`. The Unread mailbox leaves Promotions, Social and Forums out rather than asking for Primary: Gmail's categories do not remove the `INBOX` label, so an unread filter without that exclusion comes back as the whole promotional backlog rather than the mail you have not read — while one that asks for Primary comes back empty on any account where Gmail is not applying the category labels, which is unread mail with nothing left to say so. Updates stays in, because receipts, deliveries and notifications land there. Right-click any row in the list for archive, trash, spam, star and read/unread without leaving the keyboard cursor behind.
 
-AI assistance uses the default AI selected in Omarchy, with no separate Omamail AI settings. Use the outline **AI icon** button beside Compose, the message menu, or `Alt+G`. Type a multiline question or use `/` for common commands, then Enter to send or Shift+Enter for a new line. The **…** menu opens new chats and conversation history. Results return to the right dock; draft suggestions can be inserted or replace the body after review. The panel streams the conversation and supports follow-up questions without opening a terminal. The background adapter currently supports Claude. See [AI assistance](docs/AGENT.md).
+AI assistance uses the default AI selected in Omarchy, with no separate Omamail AI settings. Use the outline **AI icon** button beside Compose, the message menu, or `Alt+G`. Type a multiline question or use `/` for common commands, then Enter to send or Shift+Enter for a new line. The **…** menu opens new chats and conversation history. Results return to the right dock; draft suggestions can be inserted or replace the body after review. The panel streams the conversation and supports follow-up questions without opening a terminal. The background adapter supports Claude and Codex, using the existing Omarchy selection and CLI login. For a single message, **Reply topics** offers contextual directions; select one, review the generated text, and use **Use as reply...** to open a reply draft. See [AI assistance](docs/AGENT.md).
 
 A signature is set per mailbox on the settings page, under Writing. It is placed under a new message and above the quoted text in a reply, so a sign-off stays next to the words it signs rather than stranded below a screen of somebody else's message. It is sent exactly as typed — no `-- ` line is added in front of it, because a client that adds one turns a signature into two decisions, and the line is one keystroke away for anybody who wants it. Each mailbox keeps its own: two addresses are two identities, and one sign-off under both is wrong for whichever it was not written for. A saved draft is reopened as it was written, so resuming one never signs it twice.
 

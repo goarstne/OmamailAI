@@ -212,11 +212,64 @@ emit({'type':'result','subtype':'success','result':'Final answer'})
         for ident in ('../outside','x','a'*33): self.call('show',ident,ok=False)
 
     def test_unsupported_and_missing_provider(self):
-        for selected in ('','codex','other'):
+        for selected in ('','kimi','agy','ori','other'):
             self.tool('omarchy-default-agent',f'print({selected!r})')
             error=self.call('new',value={'messageId':'1','prompt':'p'},ok=False)
             self.assertIn('Claude',error)
         self.assertFalse(list(self.store.glob('*/job.json')))
+
+    def codex(self, events):
+        self.tool('omarchy-default-agent', 'print("codex")')
+        body = PRELUDE.replace("emit({'type':'system','subtype':'init','session_id':'11111111-2222-3333-4444-555555555555'})", "")
+        self.tool('codex', body + '\n' + events)
+
+    def test_codex_result_and_fork_keep_provider_and_owner(self):
+        self.codex("""emit({'type':'thread.started','thread_id':'11111111-2222-3333-4444-555555555555'})
+emit({'type':'item.completed','item':{'type':'reasoning','text':'HIDDEN'}})
+emit({'type':'item.completed','item':{'type':'agent_message','text':'A useful reply'}})
+emit({'type':'turn.completed','usage':{}})
+""")
+        ident = self.new()
+        shown = self.wait(ident)
+        self.assertEqual(shown['job']['state'], 'done')
+        self.assertEqual(shown['job']['provider'], 'codex')
+        self.assertTrue(shown['job']['canContinue'])
+        self.assertNotIn('HIDDEN', json.dumps(shown))
+        argv = json.loads((self.store / ident / 'argv.json').read_text())
+        self.assertIn('sandbox_mode="read-only"', argv)
+        self.assertIn('approval_policy="never"', argv)
+        self.assertNotIn('SECRET-', ' '.join(argv))
+        self.assertEqual(argv[-2], '-')  # /proc/cmdline ends with a NUL.
+        self.tool('omarchy-default-agent', 'print("claude")')
+        child = self.call('new', value={'parent': ident, 'prompt': 'Shorter'})['id']
+        self.ids.append(child)
+        followup = self.wait(child)
+        self.assertEqual(followup['job']['provider'], 'codex')
+        self.assertEqual(followup['job']['accountId'], shown['job']['accountId'])
+        argv = json.loads((self.store / child / 'argv.json').read_text())
+        self.assertEqual(argv[argv.index('fork') + 1], SESSION)
+        self.assertEqual((self.store / child / 'stdin.txt').read_text(), 'Shorter')
+
+    def test_codex_incomplete_and_failed_output_never_applies(self):
+        start = "emit({'type':'thread.started','thread_id':'11111111-2222-3333-4444-555555555555'})\n"
+        answer = "emit({'type':'item.completed','item':{'type':'agent_message','text':'Partial'}})\n"
+        for events in (start + answer, start + answer + "emit({'type':'turn.failed','error':{'message':'SECRET'}})",
+                       start + "emit({'type':'turn.completed'})", start + "emit({'type':'item.completed','item':None})"):
+            self.codex(events)
+            shown = self.wait(self.new())
+            self.assertEqual(shown['job']['state'], 'failed')
+            self.assertFalse(shown['job']['resultReady'])
+            self.assertFalse(shown['job']['canContinue'])
+            self.assertNotIn('SECRET', shown['job'].get('error', ''))
+
+    def test_lazy_launcher_is_resolved_without_running_installer(self):
+        self.tool('codex', '# mise use -g codex\nraise SystemExit("INSTALLER MUST NOT RUN")')
+        real = self.bin / 'installed-codex'
+        self.codex("emit({'type':'thread.started','thread_id':'11111111-2222-3333-4444-555555555555'}); emit({'type':'item.completed','item':{'type':'agent_message','text':'OK'}}); emit({'type':'turn.completed'})")
+        (self.bin / 'codex').rename(real)
+        self.tool('codex', '# mise use -g codex\nraise SystemExit("INSTALLER MUST NOT RUN")')
+        self.tool('mise', 'print(' + repr(str(real)) + ')')
+        self.assertEqual(self.wait(self.new())['job']['state'], 'done')
 
     def test_stream_failure_boundaries(self):
         for body in ("print('{',flush=True)","sys.stdout.buffer.write(b'\\xff\\n')", "print('x'*524289,flush=True)", "emit({'type':'result','subtype':'success','result':'x'*65537})", "emit({'type':'result','subtype':'success','result':'bad\\x00'})", "emit({'type':'result','subtype':'error','is_error':True,'result':'SECRET-ERROR'})", "print('SECRET-STDERR',file=sys.stderr);raise SystemExit(3)", "sys.stderr.write('x'*(9*1024*1024))", "emit({'type':'system','session_id':'--bad'})", "pass"):

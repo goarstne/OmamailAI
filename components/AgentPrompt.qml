@@ -5,6 +5,7 @@ import qs.Ui
 import "../agent/Agent.js" as Agent
 import "../agent" as AI
 import "../agent/ChatText.js" as ChatText
+import "../agent/ReplyTopics.js" as Topics
 import "Menu.js" as Menu
 
 // A contextual conversation. The system AI streams public output in the
@@ -104,6 +105,25 @@ FocusScope {
   readonly property string output: service && job && service.agentShownId === String(job.id)
     ? service.agentShownOutput : ""
   readonly property string answer: composer ? Agent.draftAnswer(job, output, conversation) : output
+  readonly property bool topicsTurn: Topics.lastRequest(conversation) === Topics.TOPICS_PROMPT
+  readonly property var replyTopics: topicsTurn && Topics.ready(job) ? Topics.parse(output) : []
+  readonly property bool replyReady: !composer && !overSelection && Topics.ready(job) && Topics.isReply(conversation) && output.trim() !== ""
+  signal replyDraftRequested(string text)
+  function suggestTopics() {
+    if (composer || overSelection || working || pending.busy) return false
+    newChat()
+    return submit(Topics.TOPICS_PROMPT)
+  }
+  function chooseTopic(index) {
+    if (working || pending.busy || index < 0 || index >= replyTopics.length) return false
+    return submit(Topics.replyPrompt(replyTopics[index]))
+  }
+  function useReply() {
+    if (!opened || !replyReady || !service || !service.selectedMessage
+        || !Topics.canUseReply(job, service.activeAccountId, service.selectedId, false)) return false
+    replyDraftRequested(output)
+    return true
+  }
   readonly property bool draftChanged: !!composer && !!job && !!job.draftFingerprint
     && job.draftFingerprint !== Agent.draftFingerprint(fields)
   readonly property string errorText: localError || (service ? service.agentError || "" : "")
@@ -135,10 +155,11 @@ FocusScope {
     var rows = conversation
     if (chatModel.count > rows.length) chatModel.remove(rows.length, chatModel.count - rows.length)
     for (var i = 0; i < rows.length; i++) {
-      if (i >= chatModel.count) chatModel.append({entryRole: rows[i].role, entryText: rows[i].text})
+      var shownText = Topics.displayText(rows, i)
+      if (i >= chatModel.count) chatModel.append({entryRole: rows[i].role, entryText: shownText})
       else {
         if (chatModel.get(i).entryRole !== rows[i].role) chatModel.setProperty(i, "entryRole", rows[i].role)
-        if (chatModel.get(i).entryText !== rows[i].text) chatModel.setProperty(i, "entryText", rows[i].text)
+        if (chatModel.get(i).entryText !== shownText) chatModel.setProperty(i, "entryText", shownText)
       }
     }
   }
@@ -436,7 +457,8 @@ FocusScope {
               required property int index
               readonly property bool userMessage: entryRole === "user"
               width: chat.width
-              height: entry.implicitHeight + (userMessage ? Style.space(16) : (replyCopy.visible ? replyCopy.height + Style.space(4) : 0))
+              visible: !(root.topicsTurn && root.replyTopics.length > 0)
+              height: visible ? entry.implicitHeight + (userMessage ? Style.space(16) : (replyCopy.visible ? replyCopy.height + Style.space(4) : 0)) : 0
               Rectangle {
                 anchors.fill: parent
                 visible: parent.userMessage
@@ -507,6 +529,45 @@ FocusScope {
           }
           Text {
             width: parent.width
+            visible: root.topicsTurn && Topics.ready(root.job) && root.replyTopics.length === 0
+            text: "No usable reply topics were returned. Try again or enter your own instruction."
+            textFormat: Text.PlainText
+            color: root.dimColor
+            font.family: root.panelFontFamily
+            font.pixelSize: Style.font.bodySmall
+            wrapMode: Text.WordWrap
+          }
+          Repeater {
+            model: root.replyTopics
+            QQC.AbstractButton {
+              required property var modelData
+              required property int index
+              objectName: "agent-reply-topic-" + index
+              width: chat.width
+              implicitHeight: topicText.implicitHeight + Style.space(16)
+              padding: Style.space(8)
+              enabled: !root.working
+              hoverEnabled: true
+              focusPolicy: Qt.StrongFocus
+              Accessible.name: modelData.title + ": " + modelData.description
+              background: Rectangle {
+                color: parent.hovered || parent.activeFocus ? Style.hoverFillFor(root.textColor, root.accentColor) : Style.normalFillFor(root.textColor, root.accentColor)
+                border.color: root.popupBorderColor
+              }
+              contentItem: Text {
+                id: topicText
+                text: modelData.title + "\n" + modelData.description
+                textFormat: Text.PlainText
+                wrapMode: Text.WordWrap
+                color: root.textColor
+                font.family: root.panelFontFamily
+                font.pixelSize: Style.font.bodySmall
+              }
+              onClicked: root.chooseTopic(index)
+            }
+          }
+          Text {
+            width: parent.width
             visible: !!root.job && Agent.detailText(root.job) !== ""
             text: Agent.detailText(root.job)
             textFormat: Text.PlainText
@@ -533,6 +594,32 @@ FocusScope {
         visible: !root.historyMode
         width: parent.width
         spacing: Style.space(6)
+        Button {
+          objectName: "agent-suggest-topics"
+          text: "Reply topics"
+          tooltipText: "Ask the configured Omarchy agent for reply directions"
+          visible: !root.composer && !root.overSelection
+          enabled: !root.working && !pending.busy
+          foreground: root.textColor
+          accent: root.accentColor
+          bordered: true
+          fontFamily: root.panelFontFamily
+          fontSize: Style.font.caption
+          focusable: true
+          onClicked: root.suggestTopics()
+        }
+        Button {
+          objectName: "agent-use-reply"
+          text: "Use as reply..."
+          visible: root.replyReady
+          foreground: root.textColor
+          accent: root.accentColor
+          bordered: true
+          fontFamily: root.panelFontFamily
+          fontSize: Style.font.caption
+          focusable: true
+          onClicked: root.useReply()
+        }
         Button {
           objectName: "agent-insert"
           text: "Insert at cursor"

@@ -112,6 +112,11 @@ DropArea {
     bodyWasEdited = true
     noteDraftChanged()
   }
+  function prependReply(text) {
+    bodyEdit.insert(0, String(text || "") + "\n\n")
+    bodyWasEdited = true
+    noteDraftChanged()
+  }
   property string fromEmail: ""
   property var replyRecipients: []
   property bool fromWasChosen: false

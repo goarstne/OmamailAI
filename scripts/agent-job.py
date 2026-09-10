@@ -157,6 +157,73 @@ class ClaudeStream:
         transcript_check(self.value['transcript'])
 
 
+class CodexStream(ClaudeStream):
+    """Import public JSONL messages only, never reasoning or tool payloads."""
+    def event(self, value):
+        if not isinstance(value, dict):
+            raise ValueError('The AI returned an invalid stream event.')
+        kind = value.get('type')
+        if self.final_seen:
+            raise ValueError('The AI returned events after completing its turn.')
+        if kind == 'thread.started':
+            session = value.get('thread_id')
+            if not isinstance(session, str) or not re.fullmatch('[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}', session):
+                raise ValueError('The AI returned an invalid session ID.')
+            if self.value['sessionId'] and self.value['sessionId'] != session:
+                raise ValueError('The AI changed session identity unexpectedly.')
+            self.value['sessionId'] = session
+        elif kind in ('item.started', 'item.updated', 'item.completed'):
+            item = value.get('item')
+            if not isinstance(item, dict):
+                raise ValueError('The AI returned an invalid item.')
+            if item.get('type') == 'agent_message' and kind == 'item.completed':
+                self.current = None
+                self.answer(item.get('text', ''), replace=True)
+            elif item.get('type') in ('command_execution', 'mcp_tool_call', 'web_search', 'file_change') and kind == 'item.started':
+                self.status('Using a tool')
+        elif kind == 'turn.completed':
+            if not self.value['sessionId'] or not self.value['output'].strip():
+                raise ValueError('The AI returned no complete answer.')
+            self.final_seen = True
+            self.value['complete'] = True
+        elif kind in ('turn.failed', 'error'):
+            raise ValueError('Codex could not finish this request. Check its login, model and permissions.')
+        transcript_check(self.value['transcript'])
+
+
+def agent_binary(provider):
+    """Bypass Omarchy's lazy installers; resolve only already installed CLIs."""
+    binary = shutil.which(provider)
+    if not binary:
+        raise ValueError(provider.capitalize() + ' is not installed. Set up the system agent first.')
+    with open(binary, 'rb') as handle:
+        prefix = handle.read(512)
+    if b'mise use ' in prefix:
+        resolved = subprocess.run(['mise', 'which', provider], capture_output=True, text=True, timeout=5)
+        candidate = resolved.stdout.strip()
+        if resolved.returncode or not os.path.isabs(candidate) or not os.access(candidate, os.X_OK) or os.path.realpath(candidate) == os.path.realpath(binary):
+            raise ValueError(provider.capitalize() + ' has no installed executable. Set up the system agent first.')
+        binary = candidate
+    return binary
+
+
+def agent_command(job):
+    provider = job.get('provider', 'claude')
+    binary = agent_binary(provider)
+    if provider == 'codex':
+        command = [binary, 'exec']
+        if job.get('resume'):
+            command += ['fork', job['resume']]
+        return command + ['--json', '--skip-git-repo-check',
+                          '-c', 'sandbox_mode="read-only"', '-c', 'approval_policy="never"',
+                          '-c', 'web_search="disabled"', '-c', 'features.shell_tool=false', '-']
+    command = [binary, '-p', '--verbose', '--output-format', 'stream-json',
+               '--include-partial-messages', '--permission-mode', 'dontAsk']
+    if job.get('resume'):
+        command += ['--resume', job['resume'], '--fork-session']
+    return command
+
+
 def valid_text(value):
     if not isinstance(value, str):
         raise ValueError('Expected text')
@@ -301,7 +368,7 @@ def read_job(fd, ident):
         raise ValueError('Invalid session order')
     if 'pid' in job and (type(job['pid']) is not int or job['pid'] <= 1):
         raise ValueError('Invalid session process')
-    if job.get('provider', 'claude') != 'claude':
+    if job.get('provider', 'claude') not in ('claude', 'codex'):
         raise ValueError('Unsupported saved AI provider')
     for key in ('resume', 'sessionId'):
         if key in job and (not isinstance(job[key], str) or job[key] and not re.fullmatch('[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}', job[key])):
@@ -331,7 +398,7 @@ def refresh(fd, ident):
         error = 'The saved AI session identity does not match its answer. Start a new conversation.'
     if error:
         job['error'] = error
-    job['canContinue'] = job['resultReady'] and job.get('provider') == 'claude' and bool(job.get('sessionId'))
+    job['canContinue'] = job['resultReady'] and job.get('provider', 'claude') in ('claude', 'codex') and bool(job.get('sessionId'))
     return job, output
 
 
@@ -389,11 +456,11 @@ def default_provider():
             probe.kill()
             probe.wait()
             raise ValueError('Could not read the system AI preference.')
-    if probe.returncode or selected.strip() != b'claude':
-        raise ValueError('Background AI currently supports Claude. Choose Claude in the system AI settings, then retry.')
-    if not shutil.which('claude'):
-        raise ValueError('Claude is not installed. Install and sign in to the system AI, then retry.')
-    return 'claude'
+    if probe.returncode or selected.strip() not in (b'claude', b'codex'):
+        raise ValueError('Background AI supports Claude and Codex. Select either in Omarchy; other agents need a compatible background adapter.')
+    provider = selected.strip().decode('ascii')
+    agent_binary(provider)
+    return provider
 
 
 def new(base, path):
@@ -416,7 +483,7 @@ def new(base, path):
             history = saved['transcript']
         previous.update(context)  # payload() permits only parent and prompt.
         context = previous
-        provider = 'claude'  # Native history belongs to its original provider.
+        provider = parent.get('provider', 'claude')  # History stays with its owner.
     else:
         provider = default_provider()
     if not (context.get('messageId') or context.get('messages') or isinstance(context.get('draft'), dict)):
@@ -464,17 +531,16 @@ def run(base, path, ident):
                 return
             job.update(state='running', pid=os.getpid(), updated=int(time.time()), progress='Thinking...')
             write(fd, 'job.json', job)
-        parser = ClaudeStream(display(fd)['transcript'])
+        parser_type = CodexStream if job.get('provider') == 'codex' else ClaudeStream
+        parser = parser_type(display(fd)['transcript'])
         context = json.loads(read(fd, 'context.json', INPUT_LIMIT))
         prompt = (context['prompt'] if job.get('resume') else INSTRUCTIONS + json.dumps(context, ensure_ascii=False)).encode('utf-8')
-        command = ['claude', '-p', '--verbose', '--output-format', 'stream-json', '--include-partial-messages', '--permission-mode', 'dontAsk']
-        if job.get('resume'):
-            command += ['--resume', job['resume'], '--fork-session']
         child = None
         failure = ''
         deadline = time.monotonic() + RUN_TIMEOUT
         last_write = 0
         try:
+            command = agent_command(job)
             child = subprocess.Popen(command, cwd=path, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
             with selectors.DefaultSelector() as selector:
                 for stream, event in ((child.stdin, selectors.EVENT_WRITE), (child.stdout, selectors.EVENT_READ), (child.stderr, selectors.EVENT_READ)):
@@ -537,7 +603,7 @@ def run(base, path, ident):
                 time.sleep(.05)
             if not cancelled and time.monotonic() >= deadline:
                 raise ValueError('The AI request reached its one-hour limit.')
-        except (OSError, ValueError, KeyError, TypeError, AttributeError, UnicodeError) as error:
+        except (OSError, ValueError, KeyError, TypeError, AttributeError, UnicodeError, subprocess.SubprocessError) as error:
             failure = str(error) if isinstance(error, ValueError) and not isinstance(error, (json.JSONDecodeError, UnicodeError)) else 'The AI returned an invalid stream or could not start. Check its setup and retry.'
         finally:
             if child is not None:

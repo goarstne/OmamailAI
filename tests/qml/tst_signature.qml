@@ -203,6 +203,14 @@ Item {
       verify(quote > sign, "and the quoted message follows it")
     }
 
+    function test_ai_reply_keeps_signature_and_quote() {
+      mailService.activeSignature = "Maarten"
+      compose.begin("reply", summary(), "Body", [])
+      var before = named(compose, "compose-body-editor").text
+      compose.prependReply("Thank you, I will attend.")
+      compare(named(compose, "compose-body-editor").text, "Thank you, I will attend.\n\n" + before)
+    }
+
     // A draft already carries whatever it was written with. Reopening one must
     // not sign it a second time.
     function test_reopening_a_draft_does_not_sign_it_again() {

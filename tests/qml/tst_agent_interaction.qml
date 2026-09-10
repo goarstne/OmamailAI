@@ -3,6 +3,7 @@ import QtTest
 import "../../components" as C
 import "../../agent" as AI
 import "../../agent/Agent.js" as Agent
+import "../../agent/ReplyTopics.js" as Topics
 
 Item {
   width: 800; height: 650
@@ -12,6 +13,8 @@ Item {
     property bool agentStarting: false
     property string agentError: ""
     property string activeAccountId: "imap:ada@example.com"
+    property string selectedId: "m1"
+    property var selectedMessage: ({id:"m1"})
     property string agentShownId: ""
     property string agentShownOutput: ""
     property var agentShownTranscript: []
@@ -50,10 +53,58 @@ Item {
     popupBackgroundColor: Qt.rgba(0.13,0.13,0.13,1); popupBorderColor: Qt.rgba(0.26,0.26,0.26,1); panelFontFamily: "monospace"
   }
   AI.AgentRunner { id: runner; pluginDir:"/synthetic" }
+  SignalSpy { id: replySpy; target: popup; signalName: "replyDraftRequested" }
   TestCase {
     name: "AgentInteraction"
     when: windowShown
+    function test_reply_application_rechecks_current_message() {
+      popup.openCenteredFor("m1", "Meeting")
+      service.jobs=[{id:"reply",messageId:"m1",accountId:service.activeAccountId,state:"done",resultReady:true,canContinue:true}]
+      service.agentShownOutput="Thank you, I will attend."
+      service.agentShownTranscript=[{role:"user",text:Topics.replyPrompt({instruction:"Accept"})},{role:"assistant",text:service.agentShownOutput}]
+      compare(popup.replyReady,true)
+      service.selectedId="m2"
+      verify(!popup.useReply())
+      compare(replySpy.count,0)
+      service.selectedId="m1"
+      verify(popup.useReply())
+      compare(replySpy.count,1)
+      compare(replySpy.signalArguments[0][0],service.agentShownOutput)
+      popup.close()
+      verify(!popup.useReply())
+    }
+    function test_reply_topics_require_click_and_complete_output() {
+      popup.openCenteredFor("m1", "Meeting")
+      compare(service.calls, 0)
+      verify(popup.suggestTopics())
+      compare(service.calls, 1)
+      var topics = [{title:"Zusagen", description:"Den Termin bestätigen.", instruction:"Sage zu."},
+        {title:"Nachfragen", description:"Nach der Uhrzeit fragen.", instruction:"Frage nach der Uhrzeit."}]
+      service.jobs=[{id:"topics",messageId:"m1",accountId:service.activeAccountId,state:"running",resultReady:false}]
+      service.agentStarting=false
+      service.agentShownOutput=JSON.stringify(topics)
+      service.agentShownTranscript=[{role:"user",text:Topics.TOPICS_PROMPT},{role:"assistant",text:service.agentShownOutput}]
+      compare(popup.replyTopics.length,0)
+      service.jobs=[{id:"topics",messageId:"m1",accountId:service.activeAccountId,state:"done",resultReady:true,canContinue:true}]
+      compare(popup.replyTopics.length,2)
+      verify(waitForRendering(popup))
+      verify(findChild(popup,"agent-reply-topic-0") !== null)
+      verify(popup.chooseTopic(0))
+      compare(service.parentId,"topics")
+      compare(service.calls,2)
+      compare(draft.applied,"")
+    }
+    function test_no_topics_for_draft_or_multiple_messages() {
+      popup.composer=draft
+      popup.open()
+      verify(!popup.suggestTopics())
+      popup.composer=null
+      popup.openForSelection(["m1","m2"],0,0)
+      verify(!popup.suggestTopics())
+      compare(service.calls,0)
+    }
     function init() {
+      replySpy.clear(); service.selectedId="m1"
       findChild(popup,"agent-pending-queue").messages=[]
       popup.close(); popup.composer=null
       service.jobs=[];service.agentStarting=false;service.agentError="";service.calls=0;service.accept=true

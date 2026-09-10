@@ -2830,6 +2830,11 @@ Item {
         }
         AgentPrompt {
           id: agentPrompt
+          onReplyDraftRequested: function(text) {
+            if (root.composing) return
+            root.startCompose("reply")
+            compose.prependReply(text)
+          }
           onOpenedChanged: if (opened) composeAgent.close()
           objectName: "agent-prompt"
           service: root.service
